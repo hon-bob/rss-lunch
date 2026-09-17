@@ -1,35 +1,137 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <rss version="2.0">
   <channel>
-    <title>Slatina Bistro</title>
-    <link>https://www.slatinabistro.cz/obedy</link>
-    <description>Denní menu Slatina Bistro</description>
+    <title>Polední menu restaurací</title>
+    <link>https://hon-bob.github.io/rss-lunch/rss.xml</link>
+    <description>Denní menu vybraných restaurací</description>
     <language>cs-CZ</language>
-    <lastBuildDate>Thu, 17 Sep 2026 13:15:55 +0200</lastBuildDate>
-
+    <lastBuildDate>Thu, 17 Sep 2026 13:27:03 +0200</lastBuildDate>
+    <ttl>60</ttl>
     <item>
       <title>Slatina Bistro – menu 17.9.2026</title>
-      <link>https://www.slatinabistro.cz/obedy</link>
-      <guid isPermaLink="false">slatina-bistro-2026-09-17</guid>
-      <pubDate>Thu, 17 Sep 2026 13:15:55 +0200</pubDate>
-      <description><![CDATA[
-<h3>🍽️ Denní menu 17.9.2026</h3>
-<h4>🍲 Polévky</h4>
-Česnečka se zeleninou, vejcem, slaninou a krutónem (1,3,9)<br>
-<strong>💰 35,-</strong><br>
-Gulášová s vegetariánským masem (1,6)<br>
-<strong>💰 35,-</strong><br>
-<p><strong>1. Hovězí burger, majonéza ze zeleným pepřem, restovaná pancetta s cibulí, gouda, crispers, dip (1,3,7,10,12)</strong><br>💰 169,-</p>
-<p><strong>2. Pečená krkovice na černém pivu a česneku, mačkané brambory s cibulkou (1,7)</strong><br>💰 148,-</p>
-<p><strong>3. Fusili se salsiccií a rajčaty, pecorino (1,3,7,9,12)</strong><br>💰 148,-</p>
-<p><strong>4. Falafel v kořeněné rajčatové omáčce s paprikami a cibulí, kuskus, salátek, zakysaná smetana (1,7,10,11)</strong><br>💰 145,-</p>
-<p><strong>5. Salát Nicoise (červená cibule, tuňák, vejce, brambor, olivy) (3,4,10,12)</strong><br>💰 156,-</p>
-<p><strong>6. Hovězí buritto s čedarem, salátkem a bylinkovým dipem ze zakysané smetany (1,7,10,12)</strong><br>💰 156,-</p>
-<p><strong>7. ½ Grilovaného kuřátka, pečené grenaile, bylinkový tvaroh (7)</strong><br>💰 195,-</p>
-<p><strong>8. Vepřový steak sous vide, čedarová omáčka, americké brambory se slaninovým prachem (7)</strong><br>💰 195,-</p>
-<p><strong>9. Domácí špagety v parmazánovém bochníku s omáčkou dle výběru (1,3,7) - Amatriciana s olivami a kuřecím masem Carbonara (3,7) Pesto z pečených paprik a sušených rajčat, sýr Taleggio (7)</strong><br>💰 179,-</p>
-<p><strong>10. Listové salátky s grilovanou zeleninou a pomalu pečenou panenkou, dip z modrého sýra (7,9,10,12)</strong><br>💰 165,-</p>
-      ]]></description>
+      <link>https://www.slatinabistro.cz/</link>
+      <guid isPermaLink="false">1f4d4728e53459bc26620b77f96c16ac7d41fd2b7bb427ca33240cb2f46678d6</guid>
+      <pubDate>Thu, 17 Sep 2026 13:27:03 +0200</pubDate>
+      <description>Čtvrtek 17.9.2026&lt;br&gt;
+&lt;h4&gt;🍲 Polévky&lt;/h4&gt;
+Česnečka se zeleninou, vejcem, slaninou a krutónem (1,3,9)&lt;br&gt;
+&lt;strong&gt;💰 35,-&lt;/strong&gt;&lt;br&gt;&lt;br&gt;
+Gulášová s vegetariánským masem (1,6)&lt;br&gt;
+&lt;strong&gt;💰 35,-&lt;/strong&gt;&lt;br&gt;&lt;br&gt;
+&lt;p&gt;
+&lt;strong&gt;1. Hovězí burger, majonéza ze zeleným pepřem, restovaná pancetta s cibulí, gouda, crispers, dip (1,3,7,10,12)&lt;/strong&gt;
+&lt;br&gt;💰 169,-
+&lt;/p&gt;
+&lt;p&gt;
+&lt;strong&gt;2. Pečená krkovice na černém pivu a česneku, mačkané brambory s cibulkou (1,7)&lt;/strong&gt;
+&lt;br&gt;💰 148,-
+&lt;/p&gt;
+&lt;p&gt;
+&lt;strong&gt;3. Fusili se salsiccií a rajčaty, pecorino (1,3,7,9,12)&lt;/strong&gt;
+&lt;br&gt;💰 148,-
+&lt;/p&gt;
+&lt;p&gt;
+&lt;strong&gt;4. Falafel v kořeněné rajčatové omáčce s paprikami a cibulí, kuskus, salátek, zakysaná smetana (1,7,10,11)&lt;/strong&gt;
+&lt;br&gt;💰 145,-
+&lt;/p&gt;
+&lt;p&gt;
+&lt;strong&gt;5. Salát Nicoise (červená cibule, tuňák, vejce, brambor, olivy) (3,4,10,12)&lt;/strong&gt;
+&lt;br&gt;💰 156,-
+&lt;/p&gt;
+&lt;p&gt;
+&lt;strong&gt;6. Hovězí buritto s čedarem, salátkem a bylinkovým dipem ze zakysané smetany (1,7,10,12)&lt;/strong&gt;
+&lt;br&gt;💰 156,-
+&lt;/p&gt;
+&lt;p&gt;
+&lt;strong&gt;7. ½ Grilovaného kuřátka, pečené grenaile, bylinkový tvaroh (7)&lt;/strong&gt;
+&lt;br&gt;💰 195,-
+&lt;/p&gt;
+&lt;p&gt;
+&lt;strong&gt;8. Vepřový steak sous vide, čedarová omáčka, americké brambory se slaninovým prachem (7)&lt;/strong&gt;
+&lt;br&gt;💰 195,-
+&lt;/p&gt;
+&lt;p&gt;
+&lt;strong&gt;9. Domácí špagety v parmazánovém bochníku s omáčkou dle výběru (1,3,7) - Amatriciana s olivami a kuřecím masem Carbonara (3,7) Pesto z pečených paprik a sušených rajčat, sýr Taleggio (7)&lt;/strong&gt;
+&lt;br&gt;💰 179,-
+&lt;/p&gt;
+&lt;p&gt;
+&lt;strong&gt;10. Listové salátky s grilovanou zeleninou a pomalu pečenou panenkou, dip z modrého sýra (7,9,10,12)&lt;/strong&gt;
+&lt;br&gt;💰 165,-
+&lt;/p&gt;
+Nabídka obědů na celý týden&lt;br&gt;</description>
+    </item>
+    <item>
+      <title>Táckárna – menu 17.9.2026</title>
+      <link>https://turanka.tackarna.cz/denni-menu/</link>
+      <guid isPermaLink="false">54b546720b279d3ba4a7121f31c3f5b3afae135550cc4fb9f80952eae424b10b</guid>
+      <pubDate>Thu, 17 Sep 2026 13:27:03 +0200</pubDate>
+      <description>čtvrtek 17.9.2026&lt;br&gt;
+&lt;h4&gt;🍲 Polévky&lt;/h4&gt;
+Zelňačka&lt;br&gt;
+s uzeným masem&lt;br&gt;
+1a,7,9,12&lt;br&gt;
+0,3 l&lt;br&gt;
+&lt;strong&gt;💰 42 Kč&lt;/strong&gt;&lt;br&gt;&lt;br&gt;
+&lt;h4&gt;🍽️ Hlavní jídla&lt;/h4&gt;
+BALANCED: Hovězí ragú se zeleninou a rajčaty&lt;br&gt;
+celozrnné těstoviny, sýr italského typu, Orientační energetická hodnota porce: 687 Kcal&lt;br&gt;
+1a,3,7,9,12&lt;br&gt;
+380 g&lt;br&gt;
+&lt;strong&gt;💰 164 Kč&lt;/strong&gt;&lt;br&gt;&lt;br&gt;
+Trhané krůtí stehno v bramboráku&lt;br&gt;
+švarkový crumble s cibulí, čalamáda, sriracha mayo&lt;br&gt;
+1a,3,7,10,12&lt;br&gt;
+420 g&lt;br&gt;
+&lt;strong&gt;💰 179 Kč&lt;/strong&gt;&lt;br&gt;&lt;br&gt;
+pátek 18.9.2026&lt;br&gt;
+&lt;h4&gt;🍲 Polévky&lt;/h4&gt;
+Kuřecí vývar&lt;br&gt;
+se zeleninou, masem a nudlemi&lt;br&gt;
+1a,3,7,9&lt;br&gt;
+0,3 l&lt;br&gt;
+&lt;strong&gt;💰 42 Kč&lt;/strong&gt;&lt;br&gt;&lt;br&gt;
+&lt;h4&gt;🍽️ Hlavní jídla&lt;/h4&gt;
+BALANCED: Lilek plněný tofu a sýrem&lt;br&gt;
+zeleninový salát s quinoou, Orientační energetická hodnota porce: 626 Kcal&lt;br&gt;
+1a,6,7,12&lt;br&gt;
+420 g&lt;br&gt;
+&lt;strong&gt;💰 179 Kč&lt;/strong&gt;&lt;br&gt;&lt;br&gt;
+Krůtí prsa&lt;br&gt;
+smetanová omáčka s nivou, těstoviny penne&lt;br&gt;
+1a,7&lt;br&gt;
+420 g&lt;br&gt;
+&lt;strong&gt;💰 164 Kč&lt;/strong&gt;&lt;br&gt;&lt;br&gt;
+Steak z kuřecích prs&lt;br&gt;
+zauzená omáčka se slaninou, opékané brambory&lt;br&gt;
+&lt;p&gt;
+&lt;strong&gt;7. 410 g&lt;/strong&gt;
+&lt;br&gt;💰 144 Kč
+&lt;/p&gt;
+Vepřový řízek&lt;br&gt;
+dušená rýže na cibulce, kompot&lt;br&gt;
+1a,3,7&lt;br&gt;
+450 g&lt;br&gt;
+&lt;strong&gt;💰 154 Kč&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</description>
+    </item>
+    <item>
+      <title>Jomsom – menu 17.9.2026</title>
+      <link>https://www.jomsom.cz/polednimenu/</link>
+      <guid isPermaLink="false">7d5d8ea7fe8114f16c206647027c3f5fca32b021d100cf0928b018a0b5619430</guid>
+      <pubDate>Thu, 17 Sep 2026 13:27:03 +0200</pubDate>
+      <description>Č T V R T E K&lt;br&gt;
+DAL SOUP: INDICKÁ ČOČKOVÁ POLÉVKA :- 21&lt;br&gt;
+Kč&lt;br&gt;
+1. CHICKEN BUTTER (150g): KUŘECÍ&lt;br&gt;
+KOUSKY V OMÁČCE S CHUTÍ MÁSLA :- 135&lt;br&gt;
+Kč&lt;br&gt;
+2. CHICKEN VINDALOO (150g): KUŘECÍ&lt;br&gt;
+KOUSKY A BRAMBORY S OSTROU OMÁČKOU :- 135 Kč&lt;br&gt;
+3. CHANNA PALAK (150g): CIZRNA SE&lt;br&gt;
+ŠPENÁTEM :- 135&lt;br&gt;
+Kč&lt;br&gt;
+4. MIX THALI (200g): SMĚS JÍDEL 1,2,3&lt;br&gt;
+PODÁVANÁ NA DĚLENÉM TALÍŘI :- 155&lt;br&gt;
+Kč&lt;br&gt;</description>
     </item>
   </channel>
 </rss>

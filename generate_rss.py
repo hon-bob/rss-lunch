@@ -86,10 +86,17 @@ def load_sources():
             )
 
         source_id = str(source["id"]).strip()
+        source_name = str(source["name"]).strip()
+        source_url = str(source["url"]).strip()
 
         if not source_id:
             raise ValueError(
                 "Source ID must not be empty."
+            )
+
+        if not source_name:
+            raise ValueError(
+                f"Source name must not be empty: {source_id}"
             )
 
         if source_id in known_ids:
@@ -97,17 +104,14 @@ def load_sources():
                 f"Duplicate source ID: {source_id}"
             )
 
-        known_ids.add(source_id)
-
-        source_url = str(source["url"]).strip()
-
         if not source_url.startswith(
             ("https://", "http://")
         ):
             raise ValueError(
-                f"Invalid URL for {source['name']}: "
-                f"{source_url}"
+                f"Invalid URL for {source_name}: {source_url}"
             )
+
+        known_ids.add(source_id)
 
     return sources
 
@@ -199,11 +203,7 @@ def normalize_text(value):
 def get_date_text(now):
     """Return today's date in Czech display format."""
 
-    return (
-        f"{now.day}."
-        f"{now.month}."
-        f"{now.year}"
-    )
+    return f"{now.day}.{now.month}.{now.year}"
 
 
 def date_variants(now):
@@ -258,6 +258,22 @@ def is_date_line(value):
     )
 
 
+def is_date_range_line(value):
+    """Return True when a line contains a weekly date range."""
+
+    value = str(value).strip()
+
+    return bool(
+        re.fullmatch(
+            r"\d{1,2}\.\s*\d{1,2}\.\s*"
+            r"[–—-]\s*"
+            r"\d{1,2}\.\s*\d{1,2}\.\s*"
+            r"\d{4}",
+            value,
+        )
+    )
+
+
 def is_weekday_line(value):
     """Return True when a line is a Czech weekday heading."""
 
@@ -277,7 +293,7 @@ def is_weekday_line(value):
 
 
 def find_text(lines, search_text, start=0):
-    """Find the first line containing the specified text."""
+    """Find the first line containing specified text."""
 
     normalized_search = normalize_text(search_text)
 
@@ -289,7 +305,7 @@ def find_text(lines, search_text, start=0):
 
 
 def find_exact_text(lines, search_text, start=0):
-    """Find the first line exactly matching the specified text."""
+    """Find the first line exactly matching specified text."""
 
     normalized_search = normalize_text(search_text)
 
@@ -337,6 +353,20 @@ def clean_name(value):
         str(value),
     ).strip()
 
+    value = re.sub(
+        r",?\s*Orientační energetická hodnota porce:"
+        r"\s*\d+\s*Kcal",
+        "",
+        value,
+        flags=re.IGNORECASE,
+    )
+
+    value = re.sub(
+        r"\s+",
+        " ",
+        value,
+    ).strip()
+
     return value.strip(":- ")
 
 
@@ -347,6 +377,7 @@ def remove_common_noise(lines):
         normalize_text("Každý všední den"),
         normalize_text("11:00 - 15:00"),
         normalize_text("10:00 - 14:00"),
+        normalize_text("10:30 - 14:30"),
         normalize_text("Denní menu"),
         normalize_text("Týdenní nabídka"),
         normalize_text("Recommended"),
@@ -431,13 +462,13 @@ def parse_numbered_menu(lines):
     soups = []
     dishes = []
 
-    soup_heading_index = None
-
     soup_headings = {
         normalize_text("Polévka"),
         normalize_text("Polévka:"),
         normalize_text("Polévky"),
     }
+
+    soup_heading_index = None
 
     for index, line in enumerate(lines):
         if normalize_text(line) in soup_headings:
@@ -553,10 +584,9 @@ def split_blocks_by_price(lines):
 def is_metadata_line(value):
     """Return True for weight, volume, allergens, or calorie metadata."""
 
-    value = value.strip()
+    value = str(value).strip()
 
     patterns = [
-        r"^\d+([a-z],?)+$",
         r"^\d+[a-z]?(,\d+[a-z]?)*$",
         r"^\d+([,.]\d+)?\s*l$",
         r"^\d+([,.]\d+)?\s*g$",
@@ -593,7 +623,10 @@ def block_to_menu_item(block):
         if is_metadata_line(line):
             continue
 
-        name_parts.append(line)
+        cleaned_line = clean_name(line)
+
+        if cleaned_line:
+            name_parts.append(cleaned_line)
 
     name = clean_name(
         " ".join(name_parts)
@@ -606,6 +639,45 @@ def block_to_menu_item(block):
         "name": name,
         "price": price,
     }
+
+
+def is_valid_weekly_item(item):
+    """Reject footer, allergen, date-range, and contact content."""
+
+    name = item.get("name", "")
+    normalized_name = normalize_text(name)
+    price = item.get("price", "").strip()
+
+    rejected_phrases = [
+        "seznamalergenů",
+        "váhymasa",
+        "obědovánabídkaplatí",
+        "odměňujemevěrnost",
+        "věrnostníprogram",
+        "kontaktníinformace",
+        "těšímesenavás",
+        "kdenásnajdete",
+        "otevíracídoba",
+        "vašejméno",
+        "váše-mail",
+        "vašezpráva",
+        "bezlaktózy",
+        "bezmouky",
+    ]
+
+    if is_date_range_line(name):
+        return False
+
+    if any(
+        phrase in normalized_name
+        for phrase in rejected_phrases
+    ):
+        return False
+
+    if not price:
+        return False
+
+    return True
 
 
 def parse_sectioned_menu(lines):
@@ -631,6 +703,7 @@ def parse_sectioned_menu(lines):
         normalize_text("Saláty"),
         normalize_text("Dezert"),
         normalize_text("Dezerty"),
+        normalize_text("Pizza"),
     }
 
     ignored_headings = {
@@ -675,12 +748,33 @@ def parse_sectioned_menu(lines):
             save_current_block()
             continue
 
+        if is_date_range_line(line):
+            continue
+
         current_block.append(line)
 
         if looks_like_price(line):
             save_current_block()
 
     save_current_block()
+
+    soups = [
+        item
+        for item in soups
+        if is_valid_weekly_item(item)
+    ]
+
+    dishes = [
+        item
+        for item in dishes
+        if is_valid_weekly_item(item)
+    ]
+
+    for number, dish in enumerate(
+        dishes,
+        start=1,
+    ):
+        dish["number"] = number
 
     return soups, dishes
 
@@ -710,7 +804,7 @@ def parse_slatina(lines, now):
 
 
 def parse_turanka(lines, now):
-    """Parse today's menu and weekly menu from Tackarna Turanka."""
+    """Parse today's and weekly Tackarna Turanka menus."""
 
     daily_section = find_today_section(
         lines,
@@ -779,20 +873,37 @@ def parse_turanka(lines, now):
     if weekly_start is not None:
         weekly_end = len(lines)
 
-        weekly_stop_texts = {
-            normalize_text("Kontakt"),
-            normalize_text("Kariéra"),
-            normalize_text("O nás"),
-            normalize_text("Nápoje"),
-        }
+        stop_phrases = [
+            "Seznam alergenů",
+            "Váhy masa",
+            "Obědová nabídka platí",
+            "Odměňujeme věrnost",
+            "Věrnostní program",
+            "Kontaktní informace",
+            "Těšíme se na vás",
+            "Kde nás najdete",
+            "Otevírací doba",
+            "Kontakty",
+            "Vaše jméno",
+        ]
+
+        normalized_stop_phrases = [
+            normalize_text(value)
+            for value in stop_phrases
+        ]
 
         for index in range(
             weekly_start + 1,
             len(lines),
         ):
-            normalized_line = normalize_text(lines[index])
+            normalized_line = normalize_text(
+                lines[index]
+            )
 
-            if normalized_line in weekly_stop_texts:
+            if any(
+                stop_phrase in normalized_line
+                for stop_phrase in normalized_stop_phrases
+            ):
                 weekly_end = index
                 break
 
@@ -803,6 +914,12 @@ def parse_turanka(lines, now):
         weekly_lines = remove_common_noise(
             weekly_lines
         )
+
+        weekly_lines = [
+            line
+            for line in weekly_lines
+            if not is_date_range_line(line)
+        ]
 
         weekly_soups, weekly_dishes = (
             parse_sectioned_menu(weekly_lines)
@@ -901,9 +1018,7 @@ def parse_jomsom_blocks(lines):
             match.group(1)
         )
 
-        item_price = (
-            f"{match.group(2)} Kč"
-        )
+        item_price = f"{match.group(2)} Kč"
 
         if item_name:
             items.append(
@@ -1059,7 +1174,7 @@ def format_name_and_price(item):
 
 
 def append_numbered_dishes(output, dishes):
-    """Append dishes with only their list numbers displayed in bold."""
+    """Append dishes with only their list numbers in bold."""
 
     ordered_dishes = sorted(
         dishes,
@@ -1173,17 +1288,8 @@ def format_menu(source, menu):
             weekly_dishes,
         )
 
-    source_url = html.escape(
-        source["url"],
-        quote=True,
-    )
-
-    output.append(
-        '<p>'
-        + source_url
-        + 'Otevřít menu na webu</a></p>'
-    )
-
+    # The source link is available in the RSS item's link element.
+    # Power Automate should use the Primary feed link dynamic value.
     return "\n".join(output)
 
 
@@ -1361,6 +1467,7 @@ def create_rss():
         print(
             f"Loading: {source['name']}"
         )
+
         print(
             f"URL: {source['url']}"
         )
@@ -1450,9 +1557,11 @@ def create_rss():
     print(
         f"RSS created: {OUTPUT_FILE}"
     )
+
     print(
         f"Successfully loaded: {successful}"
     )
+
     print(
         f"Failed: {failed}"
     )

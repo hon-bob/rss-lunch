@@ -1,211 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
-<channel>
-<title>Slatina Bistro</title>
-<link>https://www.slatinabistro.cz/obedy</link>
-<description>Denní menu</description>
+  <channel>
+    <title>Slatina Bistro</title>
+    <link>https://www.slatinabistro.cz/obedy</link>
+    <description>Denní menu Slatina Bistro</description>
+    <language>cs-CZ</language>
+    <lastBuildDate>Thu, 17 Sep 2026 13:15:55 +0200</lastBuildDate>
 
-<item>
-<title>Menu 17.9.2026</title>
-<link>https://www.slatinabistro.cz/obedy</link>
-<description><![CDATA[
-Obědy
-Snídaně
-Obědy
-Pizza
-Catering
-Firemní stravování
-Konferenční místnost
-Kontakt
-Kariéra
-Přijďte si pochutnat na naší obědové nabídce!
-Týdenní nabídka
-Pondělí
-14.9.2026
-Každý všední den
-11:00 - 15:00
-.
-Polévka:
-Tmavá zabíjačková s kroupami (1,9)
-35,-
-Rajčatová se sýrem (7,9)
-35,-
-1
-Vepřový steak, houbová omáčka, krokety (1,3,7)
-148,-
-2
-Čočka na kyselo, pečená klobása, okurek, chléb (1,12)
-145,-
-3
-Gemelli se smetanovou omáčkou se špenátem a kuřecím masem (1,3,7)
-148,-
-4
-Restovaná rýže se zeleninou, vejci, uzeným tofu a bylinkami (1,3,6)
-148,-
-5
-Salát Nicoise (červená cibule, tuňák, vejce, brambor, olivy) (3,4,10,12)
-156,-
-6
-Hovězí buritto s čedarem, salátkem a bylinkovým dipem ze zakysané smetany (1,7,10,12)
-156,-
-7
-½ Grilovaného kuřátka, pečené grenaile, bylinkový tvaroh (7)
-195,-
-8
-Vepřový steak sous vide, čedarová omáčka, americké brambory se slaninovým prachem (7)
-195,-
-9
-Domácí špagety v parmazánovém bochníku s omáčkou dle výběru (1,3,7) - Amatriciana s olivami a kuřecím masem  Carbonara (3,7) Pesto z pečených paprik a sušených rajčat, sýr Taleggio (7)
-179,-
-10
-Listové salátky s grilovanou zeleninou a pomalu pečenou panenkou, dip z modrého sýra (7,9,10,12)
-165,-
-Úterý
-15.9.2026
-Každý všední den
-11:00 - 15:00
-.
-Polévka:
-Bigos polévka (maso, zelí, klobása) (9,12)
-35,-
-Květáková (7)
-35,-
-1
-Kuřecí kung pao s houbami shitake, basmati rýže (1,5,6)
-148,-
-2
-Segedínský guláš, houskový knedlík (1,3,7,12)
-148,-
-3
-Rizoto s bazalkovým pestem, kuřecím masem a listy červené řepy, gran moravia (7,8,12)
-148,-
-4
-Vlažný salát z čočky beluga s pečenou zeleninou, grilovaný hermelín (7,9,10,12)
-148,-
-5
-Salát Nicoise (červená cibule, tuňák, vejce, brambor, olivy) (3,4,10,12)
-156,-
-6
-Hovězí buritto s čedarem, salátkem a bylinkovým dipem ze zakysané smetany (1,7,10,12)
-156,-
-7
-½ Grilovaného kuřátka, pečené grenaile, bylinkový tvaroh (7)
-195,-
-8
-Vepřový steak sous vide, čedarová omáčka, americké brambory se slaninovým prachem (7)
-195,-
-9
-Domácí špagety v parmazánovém bochníku s omáčkou dle výběru (1,3,7) -  Amatriciana s olivami a kuřecím masem  Carbonara (3,7) Pesto z pečených paprik a sušených rajčat, sýr Taleggio (7)
-179,-
-10
-Listové salátky s grilovanou zeleninou a pomalu pečenou panenkou, dip z modrého sýra (7,9,10,12)
-165,-
-Středa
-16.9.2026
-Každý všední den
-11:00 - 15:00
-.
-Polévka:
-Kuřecí vývar s masem, zeleninou a nudlemi (1,3,9)
-35,-
-Mrkvový krém (7)
-35,-
-1
-Chilli con carne, focccacia (1)
-155,-
-2
-Kuřecí steak marinovaný v jogurtu a tandoori, bramborovo-hrášková kaše (7)
-148,-
-3
-Tagliatele s králičím ragů na víně a kořenové zelenině, gran moravia (1,3,7,9,12)
-148,-
-4
-Dukátové buchtičky s rumovým šodó a horkými borůvkami (1,3,7)
-148,-
-5
-Salát Nicoise (červená cibule, tuňák, vejce, brambor, olivy) (3,4,10,12)
-156,-
-6
-Hovězí buritto s čedarem, salátkem a bylinkovým dipem ze zakysané smetany (1,7,10,12)
-156,-
-7
-½ Grilovaného kuřátka, pečené grenaile, bylinkový tvaroh (7)
-195,-
-8
-Vepřový steak sous vide, čedarová omáčka, americké brambory se slaninovým prachem (7)
-195,-
-9
-Domácí špagety v parmazánovém bochníku s omáčkou dle výběru (1,3,7) -Amatriciana s olivami a kuřecím masem  Carbonara (3,7) Pesto z pečených paprik a sušených rajčat, sýr Taleggio (7)
-179,-
-10
-Listové salátky s grilovanou zeleninou a pomalu pečenou panenkou, dip z modrého sýra (7,9,10,12)
-165,-
-Čtvrtek
-17.9.2026
-Každý všední den
-11:00 - 15:00
-.
-Polévka:
-Česnečka se zeleninou, vejcem, slaninou a krutónem (1,3,9)
-35,-
-Gulášová s vegetariánským masem (1,6)
-35,-
-1
-Hovězí burger, majonéza ze zeleným pepřem, restovaná pancetta s cibulí, gouda, crispers, dip (1,3,7,10,12)
-169,-
-2
-Pečená krkovice na černém pivu a česneku, mačkané brambory s cibulkou (1,7)
-148,-
-3
-Fusili se salsiccií a rajčaty, pecorino (1,3,7,9,12)
-148,-
-4
-Falafel v kořeněné rajčatové omáčce s paprikami a cibulí, kuskus, salátek, zakysaná smetana (1,7,10,11)
-145,-
-5
-Salát Nicoise (červená cibule, tuňák, vejce, brambor, olivy) (3,4,10,12)
-156,-
-6
-Hovězí buritto s čedarem, salátkem a bylinkovým dipem ze zakysané smetany (1,7,10,12)
-156,-
-7
-½ Grilovaného kuřátka, pečené grenaile, bylinkový tvaroh (7)
-195,-
-8
-Vepřový steak sous vide, čedarová omáčka, americké brambory se slaninovým prachem (7)
-195,-
-9
-Domácí špagety v parmazánovém bochníku s omáčkou dle výběru (1,3,7) - Amatriciana s olivami a kuřecím masem  Carbonara (3,7) Pesto z pečených paprik a sušených rajčat, sýr Taleggio (7)
-179,-
-10
-Listové salátky s grilovanou zeleninou a pomalu pečenou panenkou, dip z modrého sýra (7,9,10,12)
-165,-
-Pátek
-18.9.2026
-Každý všední den
-11:00 - 15:00
-.
-Polévka:
-Thajský hovězí vývar se zeleninou, chilli a koriandrem (9)
-35,-
-Fazolačka se zeleninou (9)
-35,-
-1
-Holandský řízek, bramborová kaše s pažitkou, okurek (1,3,7,10,12)
-148,-
-2
-Kuřecí stehno na citrusech a tymiánu, dušený rýže
-145,-
-3
-Canelloni s kuřecím masem, ricottou a dýní, smetanová omáčka (1,3,7)
-148,-
-4
-Tikka masala se zeleninou a sýrem, salátek, pita chléb, raita (1,7,10,12)
-145,-
-5
-Salát Nicoise (červená cibule, tuňák, vejce, brambor, olivy) (3,4,10,12)
-]]></description>
-</item>
-
-</channel>
+    <item>
+      <title>Slatina Bistro – menu 17.9.2026</title>
+      <link>https://www.slatinabistro.cz/obedy</link>
+      <guid isPermaLink="false">slatina-bistro-2026-09-17</guid>
+      <pubDate>Thu, 17 Sep 2026 13:15:55 +0200</pubDate>
+      <description><![CDATA[
+<h3>🍽️ Denní menu 17.9.2026</h3>
+<h4>🍲 Polévky</h4>
+Česnečka se zeleninou, vejcem, slaninou a krutónem (1,3,9)<br>
+<strong>💰 35,-</strong><br>
+Gulášová s vegetariánským masem (1,6)<br>
+<strong>💰 35,-</strong><br>
+<p><strong>1. Hovězí burger, majonéza ze zeleným pepřem, restovaná pancetta s cibulí, gouda, crispers, dip (1,3,7,10,12)</strong><br>💰 169,-</p>
+<p><strong>2. Pečená krkovice na černém pivu a česneku, mačkané brambory s cibulkou (1,7)</strong><br>💰 148,-</p>
+<p><strong>3. Fusili se salsiccií a rajčaty, pecorino (1,3,7,9,12)</strong><br>💰 148,-</p>
+<p><strong>4. Falafel v kořeněné rajčatové omáčce s paprikami a cibulí, kuskus, salátek, zakysaná smetana (1,7,10,11)</strong><br>💰 145,-</p>
+<p><strong>5. Salát Nicoise (červená cibule, tuňák, vejce, brambor, olivy) (3,4,10,12)</strong><br>💰 156,-</p>
+<p><strong>6. Hovězí buritto s čedarem, salátkem a bylinkovým dipem ze zakysané smetany (1,7,10,12)</strong><br>💰 156,-</p>
+<p><strong>7. ½ Grilovaného kuřátka, pečené grenaile, bylinkový tvaroh (7)</strong><br>💰 195,-</p>
+<p><strong>8. Vepřový steak sous vide, čedarová omáčka, americké brambory se slaninovým prachem (7)</strong><br>💰 195,-</p>
+<p><strong>9. Domácí špagety v parmazánovém bochníku s omáčkou dle výběru (1,3,7) - Amatriciana s olivami a kuřecím masem Carbonara (3,7) Pesto z pečených paprik a sušených rajčat, sýr Taleggio (7)</strong><br>💰 179,-</p>
+<p><strong>10. Listové salátky s grilovanou zeleninou a pomalu pečenou panenkou, dip z modrého sýra (7,9,10,12)</strong><br>💰 165,-</p>
+      ]]></description>
+    </item>
+  </channel>
 </rss>

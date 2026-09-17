@@ -17,9 +17,7 @@ OUTPUT_FILE = Path("docs/rss.xml")
 
 TIME_ZONE = ZoneInfo("Europe/Prague")
 
-FEED_URL = (
-    "https://hon-bob.github.io/rss-lunch/rss.xml"
-)
+FEED_URL = "https://hon-bob.github.io/rss-lunch/rss.xml"
 
 USER_AGENT = (
     "Mozilla/5.0 "
@@ -79,9 +77,7 @@ def load_sources():
                 "Every source must be a JSON object."
             )
 
-        missing_fields = required_fields - set(
-            source.keys()
-        )
+        missing_fields = required_fields - set(source.keys())
 
         if missing_fields:
             raise ValueError(
@@ -103,12 +99,14 @@ def load_sources():
 
         known_ids.add(source_id)
 
-        if not str(source["url"]).startswith(
+        source_url = str(source["url"]).strip()
+
+        if not source_url.startswith(
             ("https://", "http://")
         ):
             raise ValueError(
                 f"Invalid URL for {source['name']}: "
-                f"{source['url']}"
+                f"{source_url}"
             )
 
     return sources
@@ -144,7 +142,7 @@ def download_page(url):
 
 
 def html_to_lines(page_html):
-    """Convert an HTML document into cleaned visible text lines."""
+    """Convert HTML into cleaned visible text lines."""
 
     soup = BeautifulSoup(
         page_html,
@@ -190,27 +188,10 @@ def normalize_text(value):
     """Normalize text for reliable comparisons."""
 
     value = str(value).casefold()
-
-    value = value.replace(
-        "\u00a0",
-        " ",
-    )
-
-    value = value.replace(
-        "–",
-        "-",
-    )
-
-    value = value.replace(
-        "—",
-        "-",
-    )
-
-    value = re.sub(
-        r"\s+",
-        "",
-        value,
-    )
+    value = value.replace("\u00a0", " ")
+    value = value.replace("–", "-")
+    value = value.replace("—", "-")
+    value = re.sub(r"\s+", "", value)
 
     return value
 
@@ -229,37 +210,20 @@ def date_variants(now):
     """Return common representations of today's date."""
 
     return {
-        (
-            f"{now.day}."
-            f"{now.month}."
-            f"{now.year}"
-        ),
-        (
-            f"{now.day:02d}."
-            f"{now.month:02d}."
-            f"{now.year}"
-        ),
-        (
-            f"{now.day}. "
-            f"{now.month}. "
-            f"{now.year}"
-        ),
-        (
-            f"{now.day:02d}. "
-            f"{now.month:02d}. "
-            f"{now.year}"
-        ),
+        f"{now.day}.{now.month}.{now.year}",
+        f"{now.day:02d}.{now.month:02d}.{now.year}",
+        f"{now.day}. {now.month}. {now.year}",
+        f"{now.day:02d}. {now.month:02d}. {now.year}",
     }
 
 
 def contains_today(value, now):
-    """Return True when a line contains today's date."""
+    """Return True when text contains today's date."""
 
     normalized_value = normalize_text(value)
 
     return any(
-        normalize_text(date_value)
-        in normalized_value
+        normalize_text(date_value) in normalized_value
         for date_value in date_variants(now)
     )
 
@@ -280,7 +244,7 @@ def contains_any_full_date(value):
 
 
 def is_date_line(value):
-    """Return True when a line consists only of a date."""
+    """Return True when a line contains only a date."""
 
     normalized_value = normalize_text(value)
 
@@ -313,17 +277,24 @@ def is_weekday_line(value):
 
 
 def find_text(lines, search_text, start=0):
-    """Find the first line containing specified text."""
+    """Find the first line containing the specified text."""
 
-    normalized_search = normalize_text(
-        search_text
-    )
+    normalized_search = normalize_text(search_text)
 
     for index in range(start, len(lines)):
-        if (
-            normalized_search
-            in normalize_text(lines[index])
-        ):
+        if normalized_search in normalize_text(lines[index]):
+            return index
+
+    return None
+
+
+def find_exact_text(lines, search_text, start=0):
+    """Find the first line exactly matching the specified text."""
+
+    normalized_search = normalize_text(search_text)
+
+    for index in range(start, len(lines)):
+        if normalize_text(lines[index]) == normalized_search:
             return index
 
     return None
@@ -462,12 +433,14 @@ def parse_numbered_menu(lines):
 
     soup_heading_index = None
 
+    soup_headings = {
+        normalize_text("Polévka"),
+        normalize_text("Polévka:"),
+        normalize_text("Polévky"),
+    }
+
     for index, line in enumerate(lines):
-        if normalize_text(line) in {
-            normalize_text("Polévka"),
-            normalize_text("Polévka:"),
-            normalize_text("Polévky"),
-        }:
+        if normalize_text(line) in soup_headings:
             soup_heading_index = index
             break
 
@@ -498,9 +471,7 @@ def parse_numbered_menu(lines):
 
             if (
                 index + 1 < soup_end
-                and looks_like_price(
-                    lines[index + 1]
-                )
+                and looks_like_price(lines[index + 1])
             ):
                 soup_price = normalize_price(
                     lines[index + 1]
@@ -527,10 +498,7 @@ def parse_numbered_menu(lines):
                 index += 1
                 continue
 
-            number = int(
-                lines[index].strip()
-            )
-
+            number = int(lines[index].strip())
             index += 1
 
             name_parts = []
@@ -543,9 +511,7 @@ def parse_numbered_menu(lines):
                     break
 
                 if looks_like_price(current_line):
-                    price = normalize_price(
-                        current_line
-                    )
+                    price = normalize_price(current_line)
                     index += 1
                     break
 
@@ -585,13 +551,13 @@ def split_blocks_by_price(lines):
 
 
 def is_metadata_line(value):
-    """Return True when a line contains weight, volume, or allergens."""
+    """Return True for weight, volume, allergens, or calorie metadata."""
 
     value = value.strip()
 
     patterns = [
         r"^\d+([a-z],?)+$",
-        r"^\d+([a-z]?,?)+$",
+        r"^\d+[a-z]?(,\d+[a-z]?)*$",
         r"^\d+([,.]\d+)?\s*l$",
         r"^\d+([,.]\d+)?\s*g$",
         r"^orientační energetická hodnota",
@@ -616,9 +582,7 @@ def block_to_menu_item(block):
     price = ""
 
     if looks_like_price(block[-1]):
-        price = normalize_price(
-            block[-1]
-        )
+        price = normalize_price(block[-1])
         content_lines = block[:-1]
     else:
         content_lines = block
@@ -644,6 +608,83 @@ def block_to_menu_item(block):
     }
 
 
+def parse_sectioned_menu(lines):
+    """Parse menu sections where every item ends with a price."""
+
+    soups = []
+    dishes = []
+
+    current_section = "dishes"
+    current_block = []
+
+    soup_headings = {
+        normalize_text("Polévka"),
+        normalize_text("Polévka:"),
+        normalize_text("Polévky"),
+    }
+
+    dish_headings = {
+        normalize_text("Hlavní chod"),
+        normalize_text("Hlavní chody"),
+        normalize_text("Poke"),
+        normalize_text("Salát"),
+        normalize_text("Saláty"),
+        normalize_text("Dezert"),
+        normalize_text("Dezerty"),
+    }
+
+    ignored_headings = {
+        normalize_text("Denní menu"),
+        normalize_text("Týdenní menu"),
+    }
+
+    def save_current_block():
+        """Save the currently collected menu block."""
+
+        nonlocal current_block
+
+        if not current_block:
+            return
+
+        item = block_to_menu_item(current_block)
+        current_block = []
+
+        if not item:
+            return
+
+        if current_section == "soups":
+            soups.append(item)
+        else:
+            item["number"] = len(dishes) + 1
+            dishes.append(item)
+
+    for line in lines:
+        normalized_line = normalize_text(line)
+
+        if normalized_line in soup_headings:
+            save_current_block()
+            current_section = "soups"
+            continue
+
+        if normalized_line in dish_headings:
+            save_current_block()
+            current_section = "dishes"
+            continue
+
+        if normalized_line in ignored_headings:
+            save_current_block()
+            continue
+
+        current_block.append(line)
+
+        if looks_like_price(line):
+            save_current_block()
+
+    save_current_block()
+
+    return soups, dishes
+
+
 def parse_slatina(lines, now):
     """Parse today's Slatina Bistro menu."""
 
@@ -656,22 +697,22 @@ def parse_slatina(lines, now):
         ],
     )
 
-    soups, dishes = parse_numbered_menu(
-        section
-    )
+    soups, dishes = parse_numbered_menu(section)
 
     return {
         "day": DAY_NAMES[now.weekday()],
         "date": get_date_text(now),
         "soups": soups,
         "dishes": dishes,
+        "weekly_soups": [],
+        "weekly_dishes": [],
     }
 
 
 def parse_turanka(lines, now):
-    """Parse today's Tackarna Turanka menu."""
+    """Parse today's menu and weekly menu from Tackarna Turanka."""
 
-    section = find_today_section(
+    daily_section = find_today_section(
         lines,
         now,
         stop_texts=[
@@ -679,63 +720,101 @@ def parse_turanka(lines, now):
         ],
     )
 
-    soup_start = find_text(
-        section,
+    daily_soup_start = find_exact_text(
+        daily_section,
         "Polévka",
     )
 
-    main_start = find_text(
-        section,
+    daily_main_start = find_exact_text(
+        daily_section,
         "Hlavní chod",
     )
 
-    soups = []
-    dishes = []
+    daily_soups = []
+    daily_dishes = []
 
-    if soup_start is not None:
-        soup_end = (
-            main_start
-            if main_start is not None
-            else len(section)
+    if daily_soup_start is not None:
+        daily_soup_end = (
+            daily_main_start
+            if daily_main_start is not None
+            else len(daily_section)
         )
 
-        soup_lines = section[
-            soup_start + 1:soup_end
+        daily_soup_lines = daily_section[
+            daily_soup_start + 1:daily_soup_end
         ]
 
-        soup_blocks = split_blocks_by_price(
-            soup_lines
-        )
-
-        for block in soup_blocks:
+        for block in split_blocks_by_price(
+            daily_soup_lines
+        ):
             item = block_to_menu_item(block)
 
             if item:
-                soups.append(item)
+                daily_soups.append(item)
 
-    if main_start is not None:
-        main_lines = section[
-            main_start + 1:
+    if daily_main_start is not None:
+        daily_main_lines = daily_section[
+            daily_main_start + 1:
         ]
 
-        main_blocks = split_blocks_by_price(
-            main_lines
-        )
-
-        for block in main_blocks:
+        for block in split_blocks_by_price(
+            daily_main_lines
+        ):
             item = block_to_menu_item(block)
 
             if not item:
                 continue
 
-            item["number"] = len(dishes) + 1
-            dishes.append(item)
+            item["number"] = len(daily_dishes) + 1
+            daily_dishes.append(item)
+
+    weekly_soups = []
+    weekly_dishes = []
+
+    weekly_start = find_exact_text(
+        lines,
+        "Týdenní menu",
+    )
+
+    if weekly_start is not None:
+        weekly_end = len(lines)
+
+        weekly_stop_texts = {
+            normalize_text("Kontakt"),
+            normalize_text("Kariéra"),
+            normalize_text("O nás"),
+            normalize_text("Nápoje"),
+        }
+
+        for index in range(
+            weekly_start + 1,
+            len(lines),
+        ):
+            normalized_line = normalize_text(lines[index])
+
+            if normalized_line in weekly_stop_texts:
+                weekly_end = index
+                break
+
+        weekly_lines = lines[
+            weekly_start + 1:weekly_end
+        ]
+
+        weekly_lines = remove_common_noise(
+            weekly_lines
+        )
+
+        weekly_soups, weekly_dishes = (
+            parse_sectioned_menu(weekly_lines)
+        )
 
     return {
         "day": DAY_NAMES[now.weekday()],
         "date": get_date_text(now),
-        "soups": soups,
-        "dishes": dishes,
+        "soups": daily_soups,
+        "dishes": daily_dishes,
+        "weekly_soups": weekly_soups,
+        "weekly_dishes": weekly_dishes,
     }
 
 
@@ -776,9 +855,7 @@ def extract_jomsom_section(lines, now):
     end = len(lines)
 
     for index in range(start + 1, len(lines)):
-        normalized_line = normalize_text(
-            lines[index]
-        )
+        normalized_line = normalize_text(lines[index])
 
         if normalized_line in all_day_markers:
             end = index
@@ -795,7 +872,7 @@ def extract_jomsom_section(lines, now):
 
 
 def parse_jomsom_blocks(lines):
-    """Combine Jomsom lines and split items by Czech prices."""
+    """Parse Jomsom items ending with the PRICE Kč pattern."""
 
     combined_text = " ".join(lines)
 
@@ -805,21 +882,17 @@ def parse_jomsom_blocks(lines):
         combined_text,
     ).strip()
 
-    pattern = re.compile(
+    item_pattern = re.compile(
         r"(.*?)(?::\s*-\s*|:-)\s*"
         r"(\d+)\s*Kč",
         flags=re.IGNORECASE,
     )
 
     items = []
+    remaining_text = combined_text
 
-    search_position = 0
-
-    while search_position < len(combined_text):
-        match = pattern.search(
-            combined_text,
-            search_position,
-        )
+    while remaining_text:
+        match = item_pattern.search(remaining_text)
 
         if not match:
             break
@@ -840,11 +913,9 @@ def parse_jomsom_blocks(lines):
                 }
             )
 
-        combined_text = combined_text[
+        remaining_text = remaining_text[
             match.end():
         ].strip()
-
-        search_position = 0
 
     return items
 
@@ -907,6 +978,8 @@ def parse_jomsom(lines, now):
         "date": get_date_text(now),
         "soups": soups,
         "dishes": dishes,
+        "weekly_soups": [],
+        "weekly_dishes": [],
     }
 
 
@@ -927,6 +1000,8 @@ def parse_generic(lines, now):
         "date": get_date_text(now),
         "soups": soups,
         "dishes": dishes,
+        "weekly_soups": [],
+        "weekly_dishes": [],
     }
 
 
@@ -949,10 +1024,16 @@ def parse_source(source, lines, now):
         now,
     )
 
-    if (
-        not menu["soups"]
-        and not menu["dishes"]
-    ):
+    has_content = any(
+        [
+            menu.get("soups"),
+            menu.get("dishes"),
+            menu.get("weekly_soups"),
+            menu.get("weekly_dishes"),
+        ]
+    )
+
+    if not has_content:
         raise ValueError(
             "No soups or dishes were extracted."
         )
@@ -961,7 +1042,7 @@ def parse_source(source, lines, now):
 
 
 def format_name_and_price(item):
-    """Format an item using a consistent name and price layout."""
+    """Format an item with a normal, non-bold price."""
 
     item_name = html.escape(
         item["name"]
@@ -972,12 +1053,37 @@ def format_name_and_price(item):
     )
 
     if item_price:
-        return (
-            f"{item_name}, "
-            f"<strong>{item_price}</strong>"
-        )
+        return f"{item_name}, {item_price}"
 
     return item_name
+
+
+def append_numbered_dishes(output, dishes):
+    """Append dishes with only their list numbers displayed in bold."""
+
+    ordered_dishes = sorted(
+        dishes,
+        key=lambda dish: dish.get(
+            "number",
+            999,
+        ),
+    )
+
+    for position, dish in enumerate(
+        ordered_dishes,
+        start=1,
+    ):
+        number = dish.get(
+            "number",
+            position,
+        )
+
+        output.append(
+            "<p>"
+            f"<strong>{number}.</strong> "
+            + format_name_and_price(dish)
+            + "</p>"
+        )
 
 
 def format_menu(source, menu):
@@ -985,57 +1091,87 @@ def format_menu(source, menu):
 
     output = [
         (
-            f"<h2>🍽️ "
-            f"{html.escape(source['name'])}"
-            f"</h2>"
+            "<h2>🍽️ "
+            + html.escape(source["name"])
+            + "</h2>"
         ),
         (
-            f"<p><strong>"
-            f"{html.escape(menu['day'])} "
-            f"{html.escape(menu['date'])}"
-            f"</strong></p>"
+            "<p>"
+            + html.escape(menu["day"])
+            + " "
+            + html.escape(menu["date"])
+            + "</p>"
         ),
     ]
 
-    if menu["soups"]:
+    soups = menu.get(
+        "soups",
+        [],
+    )
+
+    dishes = menu.get(
+        "dishes",
+        [],
+    )
+
+    weekly_soups = menu.get(
+        "weekly_soups",
+        [],
+    )
+
+    weekly_dishes = menu.get(
+        "weekly_dishes",
+        [],
+    )
+
+    if soups:
         output.append(
             "<h3>🍲 Polévky</h3>"
         )
 
-        output.append("<ul>")
-
-        for soup in menu["soups"]:
+        for soup in soups:
             output.append(
-                "<li>"
+                "<p>"
                 + format_name_and_price(soup)
-                + "</li>"
+                + "</p>"
             )
 
-        output.append("</ul>")
-
-    if menu["dishes"]:
+    if dishes:
         output.append(
             "<h3>🍽️ Denní menu</h3>"
         )
 
-        output.append("<ol>")
-
-        ordered_dishes = sorted(
-            menu["dishes"],
-            key=lambda dish: dish.get(
-                "number",
-                999,
-            ),
+        append_numbered_dishes(
+            output,
+            dishes,
         )
 
-        for dish in ordered_dishes:
+    if weekly_soups or weekly_dishes:
+        output.append(
+            "<h3>📅 Týdenní menu</h3>"
+        )
+
+    if weekly_soups:
+        output.append(
+            "<h4>🍲 Polévky</h4>"
+        )
+
+        for soup in weekly_soups:
             output.append(
-                "<li>"
-                + format_name_and_price(dish)
-                + "</li>"
+                "<p>"
+                + format_name_and_price(soup)
+                + "</p>"
             )
 
-        output.append("</ol>")
+    if weekly_dishes:
+        output.append(
+            "<h4>🍽️ Nabídka na celý týden</h4>"
+        )
+
+        append_numbered_dishes(
+            output,
+            weekly_dishes,
+        )
 
     source_url = html.escape(
         source["url"],
@@ -1043,9 +1179,9 @@ def format_menu(source, menu):
     )
 
     output.append(
-        f'<p>{source_url}'
-        "Otevřít menu na webu"
-        "</a></p>"
+        '<p>'
+        + source_url
+        + 'Otevřít menu na webu</a></p>'
     )
 
     return "\n".join(output)
@@ -1254,13 +1390,23 @@ def create_rss():
             successful += 1
 
             print(
-                f"Soups found: "
-                f"{len(menu['soups'])}"
+                "Soups found: "
+                f"{len(menu.get('soups', []))}"
             )
 
             print(
-                f"Dishes found: "
-                f"{len(menu['dishes'])}"
+                "Daily dishes found: "
+                f"{len(menu.get('dishes', []))}"
+            )
+
+            print(
+                "Weekly soups found: "
+                f"{len(menu.get('weekly_soups', []))}"
+            )
+
+            print(
+                "Weekly dishes found: "
+                f"{len(menu.get('weekly_dishes', []))}"
             )
 
         except Exception as error:

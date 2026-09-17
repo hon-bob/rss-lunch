@@ -33,4 +33,3 @@ rss = f"""<?xml version="1.0" encoding="UTF-8"?>
 
 Path("docs").mkdir(exist_ok=True)
 Path("docs/rss.xml").write_text(rss, encoding="utf-8")
-`

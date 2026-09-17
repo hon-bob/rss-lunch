@@ -834,9 +834,8 @@ def format_menu(source, menu):
         output.append("</ol>")
 
     output.append(
-        f'<p>{html.escape(source[">'
-        "Otevřít menu na webu"
-        "</a></p>"
+        '<p>'
+        + html.escape(source[        + '">Otevřít menu na webu</a></p>'
     )
 
     return "\n".join(output)

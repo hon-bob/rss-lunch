@@ -1,4 +1,4 @@
-name: Aktualizovat RSS
+name: Update RSS
 
 on:
   workflow_dispatch:
@@ -14,22 +14,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Stáhnout obsah repozitáře
+      - name: Download repository
         uses: actions/checkout@v4
 
-      - name: Připravit Python
+      - name: Prepare Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
 
-      - name: Nainstalovat knihovny
+      - name: Install libraries
         run: pip install -r requirements.txt
 
-      - name: Vygenerovat RSS
+      - name: Generate RSS
         run: python generate_rss.py
 
-      - name: Uložit aktualizované RSS
+      - name: Save RSS
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -1,34 +1,109 @@
+import hashlib
 import html
+import json
 import re
 from datetime import datetime
 from email.utils import format_datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from xml.etree import ElementTree as ET
 
 import requests
 from bs4 import BeautifulSoup
 
 
-URL = "https://www.slatinabistro.cz/obedy"
+SOURCES_FILE = Path("sources.json")
+OUTPUT_FILE = Path("docs/rss.xml")
 TIME_ZONE = ZoneInfo("Europe/Prague")
 
+USER_AGENT = (
+    "Mozilla/5.0 (compatible; LunchMenuRSS/1.0; "
+    "+https://github.com/hon-bob/rss-lunch)"
+)
 
-def get_page_lines():
+DAY_NAMES = [
+    "Pondělí",
+    "Úterý",
+    "Středa",
+    "Čtvrtek",
+    "Pátek",
+    "Sobota",
+    "Neděle",
+]
+
+SPACED_DAY_NAMES = [
+    "P O N D Ě L Í",
+    "Ú T E R Ý",
+    "S T Ř E D A",
+    "Č T V R T E K",
+    "P Á T E K",
+    "S O B O T A",
+    "N E D Ě L E",
+]
+
+
+def load_sources():
+    """Načte seznam restaurací ze sources.json."""
+
+    if not SOURCES_FILE.exists():
+        raise FileNotFoundError(
+            f"Soubor {SOURCES_FILE} nebyl nalezen."
+        )
+
+    sources = json.loads(
+        SOURCES_FILE.read_text(encoding="utf-8")
+    )
+
+    if not isinstance(sources, list):
+        raise ValueError("sources.json musí obsahovat JSON pole.")
+
+    required_fields = {"id", "name", "url"}
+
+    for source in sources:
+        missing = required_fields - set(source.keys())
+
+        if missing:
+            raise ValueError(
+                f"Zdroj nemá povinná pole: {', '.join(missing)}"
+            )
+
+    return sources
+
+
+def download_page(url):
+    """Stáhne HTML stránku restaurace."""
+
     response = requests.get(
-        URL,
+        url,
         timeout=30,
         headers={
-            "User-Agent": "Mozilla/5.0 MenuRSS/1.0",
-            "Accept": "text/html",
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml",
+            "Accept-Language": "cs-CZ,cs;q=0.9,en;q=0.8",
         },
     )
+
     response.raise_for_status()
-    response.encoding = response.apparent_encoding
+    response.encoding = response.apparent_encoding or response.encoding
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    return response.text
 
-    # Odstranění prvků, které nejsou součástí menu
-    for element in soup(["script", "style", "noscript", "svg"]):
+
+def html_to_lines(page_html):
+    """Převede HTML stránku na seznam čistých textových řádků."""
+
+    soup = BeautifulSoup(page_html, "html.parser")
+
+    for element in soup(
+        [
+            "script",
+            "style",
+            "noscript",
+            "svg",
+            "nav",
+            "footer",
+        ]
+    ):
         element.decompose()
 
     lines = []
@@ -36,179 +111,314 @@ def get_page_lines():
     for line in soup.get_text("\n", strip=True).splitlines():
         line = re.sub(r"\s+", " ", line).strip()
 
-        if line and (not lines or lines[-1] != line):
+        if not line:
+            continue
+
+        if not lines or lines[-1] != line:
             lines.append(line)
 
     return lines
 
 
-def extract_today_menu(lines, today):
-    today_text = f"{today.day}.{today.month}.{today.year}"
+def normalize_text(value):
+    """Normalizuje text pro bezpečnější porovnávání."""
 
-    start_index = None
+    value = value.casefold()
+    value = re.sub(r"\s+", "", value)
+    value = value.replace("–", "-")
+    value = value.replace("—", "-")
 
-    for index, line in enumerate(lines):
-        normalized_line = line.replace(" ", "")
-
-        if today_text in normalized_line:
-            start_index = index
-            break
-
-    if start_index is None:
-        raise ValueError(
-            f"Menu pro dnešní datum {today_text} nebylo nalezeno."
-        )
-
-    # Hledání data následujícího dne
-    date_pattern = re.compile(
-        r"^(0?[1-9]|[12][0-9]|3[01])\."
-        r"(0?[1-9]|1[0-2])\."
-        r"(20[0-9]{2})$"
-    )
-
-    end_index = len(lines)
-
-    for index in range(start_index + 1, len(lines)):
-        normalized_line = lines[index].replace(" ", "")
-
-        if date_pattern.fullmatch(normalized_line):
-            # Zahrnutí názvu následujícího dne není žádoucí
-            if index > 0:
-                end_index = index - 1
-            else:
-                end_index = index
-
-            break
-
-    menu_lines = lines[start_index:end_index]
-
-    # Odstranění názvu dne na konci před dalším datem
-    day_names = {
-        "Pondělí",
-        "Úterý",
-        "Středa",
-        "Čtvrtek",
-        "Pátek",
-        "Sobota",
-        "Neděle",
-    }
-
-    while menu_lines and menu_lines[-1] in day_names:
-        menu_lines.pop()
-
-    if not menu_lines:
-        raise ValueError("Dnešní menu bylo nalezeno, ale je prázdné.")
-
-    return menu_lines
+    return value
 
 
-def format_menu_for_teams(menu_lines):
-    formatted = []
-    index = 0
+def is_date_line(value):
+    """Zjistí, zda řádek obsahuje pouze datum."""
 
-    while index < len(menu_lines):
-        line = menu_lines[index]
+    normalized = normalize_text(value)
 
-        # Nadpis data
-        if re.fullmatch(
+    return bool(
+        re.fullmatch(
             r"(0?[1-9]|[12][0-9]|3[01])\."
             r"(0?[1-9]|1[0-2])\."
             r"20[0-9]{2}",
-            line.replace(" ", ""),
-        ):
-            formatted.append(
-                f"<h3>🍽️ Denní menu {html.escape(line)}</h3>"
-            )
-
-        # Polévky
-        elif line.casefold() == "polévka:":
-            formatted.append("<h4>🍲 Polévky</h4>")
-
-        # Číslo samostatně na řádku, například 1, 2, 3
-        elif line.isdigit():
-            dish_number = line
-
-            if index + 1 < len(menu_lines):
-                dish_name = menu_lines[index + 1]
-                price = ""
-
-                if index + 2 < len(menu_lines):
-                    possible_price = menu_lines[index + 2]
-
-                    if re.search(r"\d+\s*,?-?$", possible_price):
-                        price = possible_price
-                        index += 1
-
-                formatted.append(
-                    "<p>"
-                    f"<strong>{html.escape(dish_number)}. "
-                    f"{html.escape(dish_name)}</strong>"
-                    f"{'<br>💰 ' + html.escape(price) if price else ''}"
-                    "</p>"
-                )
-
-                index += 1
-
-        # Cena se zobrazí pod předchozím řádkem
-        elif re.search(r"^\d+\s*,?-$", line):
-            formatted.append(f"<strong>💰 {html.escape(line)}</strong><br>")
-
-        # Provozní informace nechceme v Teams zprávě
-        elif line in {
-            "Každý všední den",
-            "11:00 - 15:00",
-            ".",
-        }:
-            pass
-
-        else:
-            formatted.append(f"{html.escape(line)}<br>")
-
-        index += 1
-
-    return "\n".join(formatted)
-
-
-def create_rss():
-    now = datetime.now(TIME_ZONE)
-    today_text = f"{now.day}.{now.month}.{now.year}"
-
-    lines = get_page_lines()
-    menu_lines = extract_today_menu(lines, now)
-    formatted_menu = format_menu_for_teams(menu_lines)
-
-    rss = f"""<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-  <channel>
-    <title>Slatina Bistro</title>
-    <link>{URL}</link>
-    <description>Denní menu Slatina Bistro</description>
-    <language>cs-CZ</language>
-    <lastBuildDate>{format_datetime(now)}</lastBuildDate>
-
-    <item>
-      <title>Slatina Bistro – menu {today_text}</title>
-      <link>{URL}</link>
-      <guid isPermaLink="false">slatina-bistro-{now.strftime("%Y-%m-%d")}</guid>
-      <pubDate>{format_datetime(now)}</pubDate>
-      <description><![CDATA[
-{formatted_menu}
-      ]]></description>
-    </item>
-  </channel>
-</rss>
-"""
-
-    Path("docs").mkdir(exist_ok=True)
-
-    Path("docs/rss.xml").write_text(
-        rss,
-        encoding="utf-8",
+            normalized,
+        )
     )
 
-    print(f"RSS vytvořeno pro datum {today_text}")
-    print(f"Počet řádků menu: {len(menu_lines)}")
+
+def date_variants(today):
+    """Vrátí podporované zápisy dnešního data."""
+
+    return {
+        f"{today.day}.{today.month}.{today.year}",
+        f"{today.day:02d}.{today.month:02d}.{today.year}",
+        f"{today.day}. {today.month}. {today.year}",
+        f"{today.day:02d}. {today.month:02d}. {today.year}",
+    }
 
 
-if __name__ == "__main__":
-    create_rss()
+def contains_today(value, today):
+    """Zjistí, zda řádek obsahuje dnešní datum."""
+
+    normalized_value = normalize_text(value)
+
+    return any(
+        normalize_text(date_value) in normalized_value
+        for date_value in date_variants(today)
+    )
+
+
+def find_text(lines, search_text, start=0):
+    """Najde první řádek obsahující zadaný text."""
+
+    normalized_search = normalize_text(search_text)
+
+    for index in range(start, len(lines)):
+        if normalized_search in normalize_text(lines[index]):
+            return index
+
+    return None
+
+
+def clean_menu_lines(lines):
+    """Odstraní technické a nepotřebné řádky."""
+
+    ignored_lines = {
+        "Každý všední den",
+        "11:00 - 15:00",
+        "10:00 - 14:00",
+        ".",
+        "Recommended",
+    }
+
+    result = []
+
+    for line in lines:
+        line = line.strip()
+
+        if not line:
+            continue
+
+        if line in ignored_lines:
+            continue
+
+        if result and result[-1] == line:
+            continue
+
+        result.append(line)
+
+    return result
+
+
+def parse_slatina(lines, today):
+    """
+    Slatina Bistro:
+    najde dnešní datum a vezme obsah do následujícího data.
+    """
+
+    start = None
+
+    for index, line in enumerate(lines):
+        if contains_today(line, today):
+            start = index
+            break
+
+    if start is None:
+        raise ValueError("Dnešní datum nebylo na stránce nalezeno.")
+
+    end = len(lines)
+
+    for index in range(start + 1, len(lines)):
+        if is_date_line(lines[index]):
+            end = index
+
+            if index > start and lines[index - 1] in DAY_NAMES:
+                end = index - 1
+
+            break
+
+        if normalize_text(lines[index]) == normalize_text("Snídaně"):
+            end = index
+            break
+
+    result = lines[start:end]
+
+    if start > 0 and lines[start - 1] in DAY_NAMES:
+        result.insert(0, lines[start - 1])
+
+    return clean_menu_lines(result)
+
+
+def parse_turanka(lines, today):
+    """
+    Táckárna Tuřanka:
+    najde dnešní datum v sekci Denní menu
+    a ukončí výběr před Týdenním menu.
+    """
+
+    daily_menu_start = find_text(lines, "Denní menu")
+
+    if daily_menu_start is None:
+        daily_menu_start = 0
+
+    start = None
+
+    for index in range(daily_menu_start, len(lines)):
+        if contains_today(lines[index], today):
+            start = index
+            break
+
+    if start is None:
+        # Některé varianty stránky zobrazují datum v záložce před menu.
+        today_name = DAY_NAMES[today.weekday()]
+        start = find_text(lines, today_name, daily_menu_start)
+
+    if start is None:
+        raise ValueError("Dnešní menu nebylo na stránce nalezeno.")
+
+    end = find_text(lines, "Týdenní menu", start + 1)
+
+    if end is None:
+        end = len(lines)
+
+    result = lines[start:end]
+
+    return clean_menu_lines(result)
+
+
+def parse_jomsom(lines, today):
+    """
+    Jomsom:
+    vybere část mezi názvem dnešního dne
+    a názvem následujícího dne.
+    """
+
+    target_day = SPACED_DAY_NAMES[today.weekday()]
+    normalized_target = normalize_text(target_day)
+
+    day_markers = {
+        normalize_text(day_name)
+        for day_name in SPACED_DAY_NAMES
+    }
+
+    start = None
+
+    for index, line in enumerate(lines):
+        if normalize_text(line) == normalized_target:
+            start = index
+            break
+
+    if start is None:
+        # Záložní hledání pro variantu bez mezer.
+        normal_day = DAY_NAMES[today.weekday()]
+        start = find_text(lines, normal_day)
+
+    if start is None:
+        raise ValueError("Název dnešního dne nebyl nalezen.")
+
+    end = len(lines)
+
+    for index in range(start + 1, len(lines)):
+        if normalize_text(lines[index]) in day_markers:
+            end = index
+            break
+
+        if "informaceopřítomnostialergenů" in normalize_text(
+            lines[index]
+        ):
+            end = index
+            break
+
+    result = lines[start:end]
+
+    return clean_menu_lines(result)
+
+
+def parse_generic(lines, today):
+    """
+    Obecný parser pro další restaurace.
+
+    Pokusí se najít dnešní datum. Pokud datum nenajde,
+    pokusí se najít název dne.
+    """
+
+    start = None
+
+    for index, line in enumerate(lines):
+        if contains_today(line, today):
+            start = index
+            break
+
+    if start is None:
+        today_name = DAY_NAMES[today.weekday()]
+        start = find_text(lines, today_name)
+
+    if start is None:
+        raise ValueError(
+            "Obecný parser nenalezl dnešní datum ani název dne."
+        )
+
+    end = min(start + 100, len(lines))
+
+    for index in range(start + 1, end):
+        if is_date_line(lines[index]):
+            end = index
+            break
+
+    return clean_menu_lines(lines[start:end])
+
+
+def parse_source(source, lines, today):
+    """Vybere parser podle id restaurace."""
+
+    parser_by_id = {
+        "slatina": parse_slatina,
+        "turanka": parse_turanka,
+        "jomsom": parse_jomsom,
+    }
+
+    parser = parser_by_id.get(
+        source["id"],
+        parse_generic,
+    )
+
+    return parser(lines, today)
+
+
+def looks_like_price(value):
+    """Zjistí, zda řádek vypadá jako cena."""
+
+    normalized = value.strip()
+
+    return bool(
+        re.fullmatch(
+            r"\d+\s*(Kč|,-|-)",
+            normalized,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def format_menu(menu_lines):
+    """Převede menu do HTML vhodného pro RSS a Teams."""
+
+    output = []
+    index = 0
+
+    while index < len(menu_lines):
+        line = menu_lines[index].strip()
+        escaped_line = html.escape(line)
+
+        if line in DAY_NAMES:
+            output.append(
+                f"<h3>📅 {escaped_line}</h3>"
+            )
+
+        elif is_date_line(line):
+            output.append(
+                f"<strong>{escaped_line}</strong><br>"
+            )
+
+        elif normalize_text(line) in {
+            normalize_text("Polévka"),
+            normalize_text("Polévka:"),

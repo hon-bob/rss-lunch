@@ -1,0 +1,17 @@
+[
+  {
+    "id": "slatina",
+    "name": "Slatina Bistro",
+    "url": "https://www.slatinabistro.cz/"
+  },
+  {
+    "id": "turanka",
+    "name": "TačkáRNA Tuřanka",
+    "url": "https://turanka.tackarna.cz/denni-menu/"
+  },
+  {
+    "id": "jomsom",
+    "name": "Jomsom",
+    "url": "https://www.jomsom.cz/polednimenu/"
+  }
+]

@@ -43,11 +43,11 @@ SPACED_DAY_NAMES = [
 
 
 def load_sources():
-    """Načte seznam restaurací ze sources.json."""
+    """Load and validate restaurants from sources.json."""
 
     if not SOURCES_FILE.exists():
         raise FileNotFoundError(
-            f"Soubor {SOURCES_FILE} nebyl nalezen."
+            f"Source file {SOURCES_FILE} was not found."
         )
 
     sources = json.loads(
@@ -55,23 +55,45 @@ def load_sources():
     )
 
     if not isinstance(sources, list):
-        raise ValueError("sources.json musí obsahovat JSON pole.")
+        raise ValueError(
+            "sources.json must contain a JSON array."
+        )
 
     required_fields = {"id", "name", "url"}
+    known_ids = set()
 
     for source in sources:
-        missing = required_fields - set(source.keys())
-
-        if missing:
+        if not isinstance(source, dict):
             raise ValueError(
-                f"Zdroj nemá povinná pole: {', '.join(missing)}"
+                "Every source in sources.json must be a JSON object."
+            )
+
+        missing_fields = required_fields - set(source.keys())
+
+        if missing_fields:
+            raise ValueError(
+                f"Source is missing required fields: "
+                f"{', '.join(sorted(missing_fields))}"
+            )
+
+        if source["id"] in known_ids:
+            raise ValueError(
+                f"Duplicate source ID: {source['id']}"
+            )
+
+        known_ids.add(source["id"])
+
+        if not source["url"].startswith(("https://", "http://")):
+            raise ValueError(
+                f"Invalid URL for source {source['name']}: "
+                f"{source['url']}"
             )
 
     return sources
 
 
 def download_page(url):
-    """Stáhne HTML stránku restaurace."""
+    """Download a restaurant web page."""
 
     response = requests.get(
         url,
@@ -84,16 +106,21 @@ def download_page(url):
     )
 
     response.raise_for_status()
-    response.encoding = response.apparent_encoding or response.encoding
+    response.encoding = (
+        response.apparent_encoding
+        or response.encoding
+        or "utf-8"
+    )
 
     return response.text
 
 
 def html_to_lines(page_html):
-    """Převede HTML stránku na seznam čistých textových řádků."""
+    """Convert an HTML document into clean visible text lines."""
 
     soup = BeautifulSoup(page_html, "html.parser")
 
+    # Remove elements that should not be part of the menu.
     for element in soup(
         [
             "script",
@@ -114,6 +141,7 @@ def html_to_lines(page_html):
         if not line:
             continue
 
+        # Prevent consecutive duplicate lines.
         if not lines or lines[-1] != line:
             lines.append(line)
 
@@ -121,18 +149,19 @@ def html_to_lines(page_html):
 
 
 def normalize_text(value):
-    """Normalizuje text pro bezpečnější porovnávání."""
+    """Normalize text for reliable case-insensitive comparison."""
 
     value = value.casefold()
     value = re.sub(r"\s+", "", value)
     value = value.replace("–", "-")
     value = value.replace("—", "-")
+    value = value.replace("\u00a0", "")
 
     return value
 
 
 def is_date_line(value):
-    """Zjistí, zda řádek obsahuje pouze datum."""
+    """Return True when a line contains only a Czech-style date."""
 
     normalized = normalize_text(value)
 
@@ -147,7 +176,7 @@ def is_date_line(value):
 
 
 def date_variants(today):
-    """Vrátí podporované zápisy dnešního data."""
+    """Return common text representations of today's date."""
 
     return {
         f"{today.day}.{today.month}.{today.year}",
@@ -158,7 +187,7 @@ def date_variants(today):
 
 
 def contains_today(value, today):
-    """Zjistí, zda řádek obsahuje dnešní datum."""
+    """Return True when a text line contains today's date."""
 
     normalized_value = normalize_text(value)
 
@@ -169,7 +198,7 @@ def contains_today(value, today):
 
 
 def find_text(lines, search_text, start=0):
-    """Najde první řádek obsahující zadaný text."""
+    """Find the first line containing the requested text."""
 
     normalized_search = normalize_text(search_text)
 
@@ -181,7 +210,7 @@ def find_text(lines, search_text, start=0):
 
 
 def clean_menu_lines(lines):
-    """Odstraní technické a nepotřebné řádky."""
+    """Remove utility, schedule, and duplicate lines from a menu."""
 
     ignored_lines = {
         "Každý všední den",
@@ -212,8 +241,10 @@ def clean_menu_lines(lines):
 
 def parse_slatina(lines, today):
     """
-    Slatina Bistro:
-    najde dnešní datum a vezme obsah do následujícího data.
+    Extract today's section from the Slatina Bistro page.
+
+    The section starts at today's date and ends at the next date
+    or at the breakfast section.
     """
 
     start = None
@@ -224,7 +255,9 @@ def parse_slatina(lines, today):
             break
 
     if start is None:
-        raise ValueError("Dnešní datum nebylo na stránce nalezeno.")
+        raise ValueError(
+            "Today's date was not found on the page."
+        )
 
     end = len(lines)
 
@@ -232,7 +265,7 @@ def parse_slatina(lines, today):
         if is_date_line(lines[index]):
             end = index
 
-            if index > start and lines[index - 1] in DAY_NAMES:
+            if lines[index - 1] in DAY_NAMES:
                 end = index - 1
 
             break
@@ -243,6 +276,7 @@ def parse_slatina(lines, today):
 
     result = lines[start:end]
 
+    # Include the weekday located immediately before the date.
     if start > 0 and lines[start - 1] in DAY_NAMES:
         result.insert(0, lines[start - 1])
 
@@ -251,9 +285,10 @@ def parse_slatina(lines, today):
 
 def parse_turanka(lines, today):
     """
-    Táckárna Tuřanka:
-    najde dnešní datum v sekci Denní menu
-    a ukončí výběr před Týdenním menu.
+    Extract today's daily menu from the Tackarna Turanka page.
+
+    The parser looks for today's date inside the daily-menu section
+    and stops before the weekly-menu section.
     """
 
     daily_menu_start = find_text(lines, "Denní menu")
@@ -269,14 +304,24 @@ def parse_turanka(lines, today):
             break
 
     if start is None:
-        # Některé varianty stránky zobrazují datum v záložce před menu.
+        # Fall back to the Czech weekday name.
         today_name = DAY_NAMES[today.weekday()]
-        start = find_text(lines, today_name, daily_menu_start)
+        start = find_text(
+            lines,
+            today_name,
+            daily_menu_start,
+        )
 
     if start is None:
-        raise ValueError("Dnešní menu nebylo na stránce nalezeno.")
+        raise ValueError(
+            "Today's menu was not found on the page."
+        )
 
-    end = find_text(lines, "Týdenní menu", start + 1)
+    end = find_text(
+        lines,
+        "Týdenní menu",
+        start + 1,
+    )
 
     if end is None:
         end = len(lines)
@@ -288,9 +333,10 @@ def parse_turanka(lines, today):
 
 def parse_jomsom(lines, today):
     """
-    Jomsom:
-    vybere část mezi názvem dnešního dne
-    a názvem následujícího dne.
+    Extract today's section from the Jomsom weekly lunch menu.
+
+    The section starts at today's spaced weekday heading and ends
+    at the following weekday heading.
     """
 
     target_day = SPACED_DAY_NAMES[today.weekday()]
@@ -309,22 +355,27 @@ def parse_jomsom(lines, today):
             break
 
     if start is None:
-        # Záložní hledání pro variantu bez mezer.
+        # Fall back to a weekday name without spaces.
         normal_day = DAY_NAMES[today.weekday()]
         start = find_text(lines, normal_day)
 
     if start is None:
-        raise ValueError("Název dnešního dne nebyl nalezen.")
+        raise ValueError(
+            "Today's weekday heading was not found."
+        )
 
     end = len(lines)
 
     for index in range(start + 1, len(lines)):
-        if normalize_text(lines[index]) in day_markers:
+        normalized_line = normalize_text(lines[index])
+
+        if normalized_line in day_markers:
             end = index
             break
 
-        if "informaceopřítomnostialergenů" in normalize_text(
-            lines[index]
+        if (
+            "informaceopřítomnostialergenů"
+            in normalized_line
         ):
             end = index
             break
@@ -336,10 +387,10 @@ def parse_jomsom(lines, today):
 
 def parse_generic(lines, today):
     """
-    Obecný parser pro další restaurace.
+    Try to extract today's menu from an unknown restaurant page.
 
-    Pokusí se najít dnešní datum. Pokud datum nenajde,
-    pokusí se najít název dne.
+    The parser first looks for today's date and then falls back
+    to today's Czech weekday name.
     """
 
     start = None
@@ -355,21 +406,27 @@ def parse_generic(lines, today):
 
     if start is None:
         raise ValueError(
-            "Obecný parser nenalezl dnešní datum ani název dne."
+            "The generic parser could not find today's date "
+            "or weekday name."
         )
 
+    # Limit generic extraction to avoid returning the entire page.
     end = min(start + 100, len(lines))
 
     for index in range(start + 1, end):
         if is_date_line(lines[index]):
             end = index
+
+            if lines[index - 1] in DAY_NAMES:
+                end = index - 1
+
             break
 
     return clean_menu_lines(lines[start:end])
 
 
 def parse_source(source, lines, today):
-    """Vybere parser podle id restaurace."""
+    """Select a specialized parser based on the source ID."""
 
     parser_by_id = {
         "slatina": parse_slatina,
@@ -386,7 +443,7 @@ def parse_source(source, lines, today):
 
 
 def looks_like_price(value):
-    """Zjistí, zda řádek vypadá jako cena."""
+    """Return True when a line looks like a menu price."""
 
     normalized = value.strip()
 
@@ -400,7 +457,7 @@ def looks_like_price(value):
 
 
 def format_menu(menu_lines):
-    """Převede menu do HTML vhodného pro RSS a Teams."""
+    """Convert extracted menu lines into HTML suitable for RSS."""
 
     output = []
     index = 0
@@ -422,3 +479,248 @@ def format_menu(menu_lines):
         elif normalize_text(line) in {
             normalize_text("Polévka"),
             normalize_text("Polévka:"),
+            normalize_text("Polévky"),
+        }:
+            output.append(
+                "<h4>🍲 Polévky</h4>"
+            )
+
+        elif normalize_text(line) in {
+            normalize_text("Hlavní chod"),
+            normalize_text("Hlavní chody"),
+        }:
+            output.append(
+                "<h4>🍽️ Hlavní jídla</h4>"
+            )
+
+        elif line.isdigit():
+            dish_number = line
+
+            if index + 1 < len(menu_lines):
+                dish_name = menu_lines[index + 1]
+                price = None
+
+                if (
+                    index + 2 < len(menu_lines)
+                    and looks_like_price(menu_lines[index + 2])
+                ):
+                    price = menu_lines[index + 2]
+                    index += 1
+
+                output.append("<p>")
+                output.append(
+                    f"<strong>{html.escape(dish_number)}. "
+                    f"{html.escape(dish_name)}</strong>"
+                )
+
+                if price:
+                    output.append(
+                        f"<br>💰 {html.escape(price)}"
+                    )
+
+                output.append("</p>")
+                index += 1
+
+        elif looks_like_price(line):
+            output.append(
+                f"<strong>💰 {escaped_line}</strong><br><br>"
+            )
+
+        else:
+            output.append(
+                f"{escaped_line}<br>"
+            )
+
+        index += 1
+
+    return "\n".join(output)
+
+
+def add_rss_item(channel, source, menu_lines, now):
+    """Add one successful restaurant result to the RSS channel."""
+
+    item = ET.SubElement(channel, "item")
+    date_text = f"{now.day}.{now.month}.{now.year}"
+
+    ET.SubElement(item, "title").text = (
+        f"{source['name']} – menu {date_text}"
+    )
+
+    ET.SubElement(item, "link").text = source["url"]
+
+    guid_source = (
+        f"{source['id']}:{now.strftime('%Y-%m-%d')}"
+    )
+
+    guid_value = hashlib.sha256(
+        guid_source.encode("utf-8")
+    ).hexdigest()
+
+    guid = ET.SubElement(
+        item,
+        "guid",
+        {"isPermaLink": "false"},
+    )
+    guid.text = guid_value
+
+    ET.SubElement(item, "pubDate").text = (
+        format_datetime(now)
+    )
+
+    description = ET.SubElement(
+        item,
+        "description",
+    )
+    description.text = format_menu(menu_lines)
+
+
+def add_error_item(channel, source, error, now):
+    """Add a restaurant loading error to the RSS channel."""
+
+    item = ET.SubElement(channel, "item")
+
+    ET.SubElement(item, "title").text = (
+        f"{source['name']} – menu se nepodařilo načíst"
+    )
+
+    ET.SubElement(item, "link").text = source["url"]
+
+    guid = ET.SubElement(
+        item,
+        "guid",
+        {"isPermaLink": "false"},
+    )
+
+    guid.text = (
+        f"{source['id']}-error-{now.strftime('%Y-%m-%d')}"
+    )
+
+    ET.SubElement(item, "pubDate").text = (
+        format_datetime(now)
+    )
+
+    description = ET.SubElement(
+        item,
+        "description",
+    )
+
+    description.text = (
+        "<strong>Menu se nepodařilo načíst.</strong><br>"
+        f"{html.escape(str(error))}"
+    )
+
+
+def create_rss():
+    """Download all configured sources and create a combined RSS feed."""
+
+    now = datetime.now(TIME_ZONE)
+    sources = load_sources()
+
+    rss = ET.Element(
+        "rss",
+        {"version": "2.0"},
+    )
+
+    channel = ET.SubElement(
+        rss,
+        "channel",
+    )
+
+    ET.SubElement(channel, "title").text = (
+        "Polední menu restaurací"
+    )
+
+    ET.SubElement(channel, "link").text = (
+        "https://hon-bob.github.io/rss-lunch/rss.xml"
+    )
+
+    ET.SubElement(channel, "description").text = (
+        "Denní menu vybraných restaurací"
+    )
+
+    ET.SubElement(channel, "language").text = (
+        "cs-CZ"
+    )
+
+    ET.SubElement(channel, "lastBuildDate").text = (
+        format_datetime(now)
+    )
+
+    ET.SubElement(channel, "ttl").text = "60"
+
+    successful = 0
+    failed = 0
+
+    for source in sources:
+        print(f"Loading: {source['name']}")
+        print(f"URL: {source['url']}")
+
+        try:
+            page_html = download_page(source["url"])
+            lines = html_to_lines(page_html)
+
+            menu_lines = parse_source(
+                source,
+                lines,
+                now,
+            )
+
+            if not menu_lines:
+                raise ValueError(
+                    "The parser returned an empty menu."
+                )
+
+            add_rss_item(
+                channel,
+                source,
+                menu_lines,
+                now,
+            )
+
+            successful += 1
+
+            print(
+                f"Success: {len(menu_lines)} menu lines found"
+            )
+
+        except Exception as error:
+            failed += 1
+
+            print(
+                f"Error for {source['name']}: {error}"
+            )
+
+            add_error_item(
+                channel,
+                source,
+                error,
+                now,
+            )
+
+    OUTPUT_FILE.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    tree = ET.ElementTree(rss)
+
+    # Pretty-print XML when supported by the Python version.
+    try:
+        ET.indent(tree, space="  ")
+    except AttributeError:
+        pass
+
+    tree.write(
+        OUTPUT_FILE,
+        encoding="utf-8",
+        xml_declaration=True,
+    )
+
+    print()
+    print(f"RSS created: {OUTPUT_FILE}")
+    print(f"Successfully loaded: {successful}")
+    print(f"Failed: {failed}")
+
+
+if __name__ == "__main__":
+    create_rss()

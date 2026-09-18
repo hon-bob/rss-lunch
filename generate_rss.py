@@ -802,16 +802,94 @@ def parse_slatina(lines, now):
         "weekly_dishes": [],
     }
 
-
 def parse_turanka(lines, now):
-    """Parse today's and weekly Tackarna Turanka menus."""
+    """Parse today's and weekly menus from Tackarna Turanka."""
 
-    daily_section = find_today_section(
-        lines,
-        now,
-        stop_texts=[
-            "Týdenní menu",
-        ],
+    daily_soups = []
+    daily_dishes = []
+    weekly_soups = []
+    weekly_dishes = []
+
+    # Find all occurrences of today's date.
+    # The page contains today's date in the day selector and again
+    # next to the actual daily menu. The last occurrence is normally
+    # the one belonging to the real menu content.
+    today_indexes = [
+        index
+        for index, line in enumerate(lines)
+        if contains_today(line, now)
+    ]
+
+    if not today_indexes:
+        raise ValueError(
+            "Today's date was not found on the Tackarna page."
+        )
+
+    daily_start = None
+
+    # Prefer an occurrence followed by a soup or main-course heading.
+    for candidate_index in reversed(today_indexes):
+        candidate_end = min(
+            candidate_index + 15,
+            len(lines),
+        )
+
+        nearby_lines = lines[
+            candidate_index:candidate_end
+        ]
+
+        has_menu_heading = any(
+            normalize_text(line) in {
+                normalize_text("Polévka"),
+                normalize_text("Polévka:"),
+                normalize_text("Polévky"),
+                normalize_text("Hlavní chod"),
+                normalize_text("Hlavní chody"),
+            }
+            for line in nearby_lines
+        )
+
+        if has_menu_heading:
+            daily_start = candidate_index
+            break
+
+    if daily_start is None:
+        daily_start = today_indexes[-1]
+
+    # Stop the daily menu before the next date or weekly menu heading.
+    daily_end = len(lines)
+
+    for index in range(
+        daily_start + 1,
+        len(lines),
+    ):
+        normalized_line = normalize_text(
+            lines[index]
+        )
+
+        if normalized_line == normalize_text(
+            "Týdenní menu"
+        ):
+            daily_end = index
+            break
+
+        if contains_any_full_date(lines[index]):
+            daily_end = index
+
+            if (
+                index > daily_start
+                and is_weekday_line(lines[index - 1])
+            ):
+                daily_end = index - 1
+
+            break
+
+    daily_section = lines[
+        daily_start:daily_end
+    ]
+
+    daily_section = remove_common_noise(
+        daily_section
     )
 
     daily_soup_start = find_exact_text(
@@ -819,14 +897,30 @@ def parse_turanka(lines, now):
         "Polévka",
     )
 
+    if daily_soup_start is None:
+        daily_soup_start = find_exact_text(
+            daily_section,
+            "Polévka:",
+        )
+
+    if daily_soup_start is None:
+        daily_soup_start = find_exact_text(
+            daily_section,
+            "Polévky",
+        )
+
     daily_main_start = find_exact_text(
         daily_section,
         "Hlavní chod",
     )
 
-    daily_soups = []
-    daily_dishes = []
+    if daily_main_start is None:
+        daily_main_start = find_exact_text(
+            daily_section,
+            "Hlavní chody",
+        )
 
+    # Parse daily soups.
     if daily_soup_start is not None:
         daily_soup_end = (
             daily_main_start
@@ -846,6 +940,7 @@ def parse_turanka(lines, now):
             if item:
                 daily_soups.append(item)
 
+    # Parse daily main dishes.
     if daily_main_start is not None:
         daily_main_lines = daily_section[
             daily_main_start + 1:
@@ -862,12 +957,11 @@ def parse_turanka(lines, now):
             item["number"] = len(daily_dishes) + 1
             daily_dishes.append(item)
 
-    weekly_soups = []
-    weekly_dishes = []
-
+    # Find the exact weekly-menu heading after the daily menu.
     weekly_start = find_exact_text(
         lines,
         "Týdenní menu",
+        start=daily_start,
     )
 
     if weekly_start is not None:
@@ -915,6 +1009,7 @@ def parse_turanka(lines, now):
             weekly_lines
         )
 
+        # Remove the weekly date range from the list of dishes.
         weekly_lines = [
             line
             for line in weekly_lines
@@ -923,6 +1018,11 @@ def parse_turanka(lines, now):
 
         weekly_soups, weekly_dishes = (
             parse_sectioned_menu(weekly_lines)
+        )
+
+    if not daily_soups and not daily_dishes:
+        print(
+            "Warning: No daily Tackarna menu items were extracted."
         )
 
     return {

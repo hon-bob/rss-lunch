@@ -502,41 +502,96 @@ def is_valid_turanka_item(item):
 
 
 def extract_turanka_daily_section(lines, now):
-    """Find the real daily section, not the date selector at the top."""
+    """Find the real Tackarna daily section for the current date."""
 
-    candidates = [
-        index for index, line in enumerate(lines) if contains_today(line, now)
-    ]
+    candidates = []
+
+    for index, line in enumerate(lines):
+        # Ignore weekly date ranges such as 14. 9. - 18. 9. 2026.
+        if is_date_range_line(line):
+            continue
+
+        if contains_today(line, now):
+            candidates.append(index)
+
     if not candidates:
-        raise ValueError("Today's date was not found on the Tackarna page.")
+        raise ValueError(
+            "Today's date was not found on the Tackarna page."
+        )
 
-    headings = {
+    daily_start = None
+
+    menu_headings = {
         normalize_text("Polévka"),
         normalize_text("Polévky"),
         normalize_text("Hlavní chod"),
         normalize_text("Hlavní chody"),
     }
 
-    daily_start = None
+    # Prefer a date followed shortly by a soup or main-course heading.
+    # The real daily section normally contains these headings immediately
+    # after the date, unlike the navigation selector at the top.
     for candidate in reversed(candidates):
-        nearby = lines[candidate:min(candidate + 20, len(lines))]
-        if any(normalize_text(line) in headings for line in nearby):
+        nearby_lines = lines[
+            candidate + 1:min(candidate + 12, len(lines))
+        ]
+
+        has_menu_heading = any(
+            normalize_text(line) in menu_headings
+            for line in nearby_lines
+        )
+
+        if has_menu_heading:
             daily_start = candidate
             break
 
     if daily_start is None:
-        daily_start = candidates[-1]
+        raise ValueError(
+            "Today's date was found, but the daily menu section "
+            "could not be identified."
+        )
 
     daily_end = len(lines)
-    for index in range(daily_start + 1, len(lines)):
-        if normalize_text(lines[index]) == normalize_text("Týdenní menu"):
+
+    for index in range(
+        daily_start + 1,
+        len(lines),
+    ):
+        line = lines[index]
+        normalized_line = normalize_text(line)
+
+        # Weekly menu starts immediately after Friday's daily menu.
+        if normalized_line == normalize_text("Týdenní menu"):
             daily_end = index
             break
-        if contains_any_full_date(lines[index]):
-            daily_end = index - 1 if is_weekday_line(lines[index - 1]) else index
+
+        # Stop when the next daily date begins.
+        if (
+            contains_any_full_date(line)
+            and not contains_today(line, now)
+            and not is_date_range_line(line)
+        ):
+            daily_end = index
+
+            if is_weekday_line(lines[index - 1]):
+                daily_end = index - 1
+
             break
 
-    return remove_common_noise(lines[daily_start:daily_end])
+    daily_section = lines[
+        daily_start:daily_end
+    ]
+
+    daily_section = remove_common_noise(
+        daily_section
+    )
+
+    print(
+        "Tackarna daily section starts with: "
+        + " | ".join(daily_section[:8])
+    )
+
+    return daily_section
 
 
 def parse_turanka_daily(lines, now):

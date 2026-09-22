@@ -12,6 +12,7 @@ import requests
 from bs4 import BeautifulSoup
 
 SOURCES_FILE = Path("sources.json")
+BBQ_MENU_FILE = Path("menu_bbq.json")
 OUTPUT_FILE = Path("docs/rss.xml")
 TIME_ZONE = ZoneInfo("Europe/Prague")
 FEED_URL = "https://hon-bob.github.io/rss-lunch/rss.xml"
@@ -395,14 +396,76 @@ def parse_jomsom(lines, now):
 
 
 def parse_moc_bbq(now):
-    """Return a static notice; the menu itself is published as images."""
+    """Load the fixed MOC BBQ menu for the current weekday from JSON."""
+
+    if not BBQ_MENU_FILE.exists():
+        raise FileNotFoundError(
+            f"BBQ menu file {BBQ_MENU_FILE} was not found."
+        )
+
+    data = json.loads(
+        BBQ_MENU_FILE.read_text(encoding="utf-8")
+    )
+
+    weekdays = data.get("weekdays")
+    if not isinstance(weekdays, dict):
+        raise ValueError(
+            "menu_bbq.json must contain a weekdays object."
+        )
+
+    weekday_key = str(now.weekday())
+    weekday_menu = weekdays.get(weekday_key)
+
+    if weekday_menu is None:
+        return result(
+            now,
+            static_title="Polední menu",
+            static_text=(
+                "Polední menu je dostupné pouze v pracovních dnech "
+                "od 10:30 do 14:00."
+            ),
+        )
+
+    soups = weekday_menu.get("soups", [])
+    dishes = weekday_menu.get("dishes", [])
+
+    if not isinstance(soups, list) or not isinstance(dishes, list):
+        raise ValueError(
+            f"Invalid menu structure for weekday {weekday_key}."
+        )
+
+    normalized_soups = []
+    for soup in soups:
+        if not isinstance(soup, dict) or not soup.get("name"):
+            continue
+        normalized_soups.append(
+            {
+                "name": str(soup["name"]).strip(),
+                "price": str(soup.get("price", "")).strip(),
+            }
+        )
+
+    normalized_dishes = []
+    for position, dish in enumerate(dishes, start=1):
+        if not isinstance(dish, dict) or not dish.get("name"):
+            continue
+        normalized_dishes.append(
+            {
+                "number": int(dish.get("number", position)),
+                "name": str(dish["name"]).strip(),
+                "price": str(dish.get("price", "")).strip(),
+            }
+        )
+
+    if not normalized_soups and not normalized_dishes:
+        raise ValueError(
+            f"No MOC BBQ menu items found for weekday {weekday_key}."
+        )
+
     return result(
         now,
-        static_title="Polední menu",
-        static_text=(
-            "Stálé polední menu je dostupné každý pracovní den od 10:30 do 14:00. "
-            "Kompletní nabídku najdete na stránce restaurace."
-        ),
+        soups=normalized_soups,
+        dishes=normalized_dishes,
     )
 
 

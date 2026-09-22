@@ -5,13 +5,13 @@
     <link>https://hon-bob.github.io/rss-lunch/rss.xml</link>
     <description>Denní menu vybraných restaurací</description>
     <language>cs-CZ</language>
-    <lastBuildDate>Tue, 22 Sep 2026 08:31:31 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 22 Sep 2026 08:39:04 +0200</lastBuildDate>
     <ttl>60</ttl>
     <item>
       <title>Slatina Bistro | Úterý 22.9.2026</title>
       <link>https://www.slatinabistro.cz/</link>
       <guid isPermaLink="false">1656ce900fba509465a57a50aa8de52ffb759081b022654c222e15b95808ef5d</guid>
-      <pubDate>Tue, 22 Sep 2026 08:31:31 +0200</pubDate>
+      <pubDate>Tue, 22 Sep 2026 08:39:04 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Slatina Bistro&lt;/h2&gt;
 &lt;p&gt;Úterý 22.9.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -33,7 +33,7 @@
       <title>Táckárna | Úterý 22.9.2026</title>
       <link>https://turanka.tackarna.cz/denni-menu/</link>
       <guid isPermaLink="false">91d5454395d170a97686f90e8c651a189fd543665703366bdbc5bb7dd3a453ef</guid>
-      <pubDate>Tue, 22 Sep 2026 08:31:31 +0200</pubDate>
+      <pubDate>Tue, 22 Sep 2026 08:39:04 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Táckárna&lt;/h2&gt;
 &lt;p&gt;Úterý 22.9.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -64,7 +64,7 @@
       <title>Jomsom | Úterý 22.9.2026</title>
       <link>https://www.jomsom.cz/polednimenu/</link>
       <guid isPermaLink="false">fe3ddf1bd498a9ff220e3e7f2dc120f44f57742356ac41002f7e06546c94e668</guid>
-      <pubDate>Tue, 22 Sep 2026 08:31:31 +0200</pubDate>
+      <pubDate>Tue, 22 Sep 2026 08:39:04 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Jomsom&lt;/h2&gt;
 &lt;p&gt;Úterý 22.9.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -79,11 +79,20 @@
       <title>MOC BBQ House | Úterý 22.9.2026</title>
       <link>https://mocbbqhouse.cz/obedove-menu/</link>
       <guid isPermaLink="false">08db8d5e4dbfa26dbac5af4da461b2d8f9f36acd8e7b3c800328f422e3508b76</guid>
-      <pubDate>Tue, 22 Sep 2026 08:31:31 +0200</pubDate>
+      <pubDate>Tue, 22 Sep 2026 08:39:04 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ MOC BBQ House&lt;/h2&gt;
 &lt;p&gt;Úterý 22.9.2026&lt;/p&gt;
-&lt;h3&gt;🍽️ Polední menu&lt;/h3&gt;
-&lt;p&gt;Stálé polední menu je dostupné každý pracovní den od 10:30 do 14:00. Kompletní nabídku najdete na stránce restaurace.&lt;/p&gt;</description>
+&lt;h3&gt;🍲 Polévky&lt;/h3&gt;
+&lt;p&gt;Súp Tom Yum, thajská pikantní krevetová polévka, 55 Kč&lt;/p&gt;
+&lt;h3&gt;🍽️ Denní menu&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; Bún nem, tenké rýžové nudle, smažené jarní závitky s vepřovým masem a rybí omáčkou, 189 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Gà xào Cà ri, restované kuřecí maso, kari omáčka s rýží nebo rýžovými nudlemi, 189 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; Gà xào sốt teriyaki, restované kuřecí maso s teriyaki omáčkou a rýží nebo rýžovými nudlemi, 189 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4.&lt;/strong&gt; Bò sốt tiêu đen, restované hovězí maso, pepřová omáčka a rýže nebo rýžové nudle, 199 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;5.&lt;/strong&gt; Hai loại thịt dầu hào, mix restovaného kuřecího a hovězího masa, zelenina, ústřicová omáčka a rýže nebo rýžové nudle, 199 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;6.&lt;/strong&gt; Mỳ xào đùi gà nướng, restované vaječné nudle s grilovaným kuřecím stehnem, 209 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;7.&lt;/strong&gt; Vịt quay hoisin, pečená kachna s hoisin omáčkou a rýží nebo rýžovými nudlemi, 239 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;8.&lt;/strong&gt; Bibimbap Bò Korea, dušená rýže, hovězí maso, čerstvá zelenina, vajíčko a korejská pálivá pasta, 209 Kč&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

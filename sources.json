@@ -13,5 +13,11 @@
     "id": "jomsom",
     "name": "Jomsom",
     "url": "https://www.jomsom.cz/polednimenu/"
+  },
+  {
+    "id": "moc-bbq",
+    "name": "MOC BBQ House",
+    "url": "https://mocbbqhouse.cz/obedove-menu/",
+    "static": true
   }
 ]

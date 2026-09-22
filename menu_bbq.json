@@ -1,0 +1,245 @@
+{
+  "restaurant": {
+    "id": "moc-bbq",
+    "name": "MOC BBQ House",
+    "url": "https://mocbbqhouse.cz/obedove-menu/",
+    "serving_hours": "10:30-14:00"
+  },
+  "weekdays": {
+    "0": {
+      "day": "Pondělí",
+      "soups": [
+        {
+          "name": "Súp Kimchi, kimchi polévka",
+          "price": "55 Kč"
+        }
+      ],
+      "dishes": [
+        {
+          "name": "Thăn heo chiên xù - Sốt tiêu đen, obalovaná vepřová panenka s pepřovou omáčkou a rýží nebo rýžovými nudlemi",
+          "price": "199 Kč",
+          "number": 1
+        },
+        {
+          "name": "Bún bò Nam bộ, tenké rýžové nudle, restované hovězí maso, arašídy, zelenina a zálivka",
+          "price": "199 Kč",
+          "number": 2
+        },
+        {
+          "name": "Gà Kungpao, kuřecí kungpao s rýží nebo rýžovými nudlemi",
+          "price": "199 Kč",
+          "number": 3
+        },
+        {
+          "name": "Bò xào cay, restované hovězí maso s pikantní omáčkou a rýží nebo rýžovými nudlemi",
+          "price": "199 Kč",
+          "number": 4
+        },
+        {
+          "name": "Bulgogi Bò Korea, restované marinované hovězí maso, čerstvá zelenina, vajíčka a tradiční korejská pálivá pasta",
+          "price": "209 Kč",
+          "number": 5
+        },
+        {
+          "name": "Vịt Cà ri, pečená kachna, kari omáčka s rýží nebo rýžovými nudlemi",
+          "price": "239 Kč",
+          "number": 6
+        }
+      ]
+    },
+    "1": {
+      "day": "Úterý",
+      "soups": [
+        {
+          "name": "Súp Tom Yum, thajská pikantní krevetová polévka",
+          "price": "55 Kč"
+        }
+      ],
+      "dishes": [
+        {
+          "name": "Bún nem, tenké rýžové nudle, smažené jarní závitky s vepřovým masem a rybí omáčkou",
+          "price": "189 Kč",
+          "number": 1
+        },
+        {
+          "name": "Gà xào Cà ri, restované kuřecí maso, kari omáčka s rýží nebo rýžovými nudlemi",
+          "price": "189 Kč",
+          "number": 2
+        },
+        {
+          "name": "Gà xào sốt teriyaki, restované kuřecí maso s teriyaki omáčkou a rýží nebo rýžovými nudlemi",
+          "price": "189 Kč",
+          "number": 3
+        },
+        {
+          "name": "Bò sốt tiêu đen, restované hovězí maso, pepřová omáčka a rýže nebo rýžové nudle",
+          "price": "199 Kč",
+          "number": 4
+        },
+        {
+          "name": "Hai loại thịt dầu hào, mix restovaného kuřecího a hovězího masa, zelenina, ústřicová omáčka a rýže nebo rýžové nudle",
+          "price": "199 Kč",
+          "number": 5
+        },
+        {
+          "name": "Mỳ xào đùi gà nướng, restované vaječné nudle s grilovaným kuřecím stehnem",
+          "price": "209 Kč",
+          "number": 6
+        },
+        {
+          "name": "Vịt quay hoisin, pečená kachna s hoisin omáčkou a rýží nebo rýžovými nudlemi",
+          "price": "239 Kč",
+          "number": 7
+        },
+        {
+          "name": "Bibimbap Bò Korea, dušená rýže, hovězí maso, čerstvá zelenina, vajíčko a korejská pálivá pasta",
+          "price": "209 Kč",
+          "number": 8
+        }
+      ]
+    },
+    "2": {
+      "day": "Středa",
+      "soups": [
+        {
+          "name": "Súp Bò bằm, polévka z mletého hovězího masa",
+          "price": "55 Kč"
+        }
+      ],
+      "dishes": [
+        {
+          "name": "Thăn heo chiên xào cay, restovaná vepřová panenka na pikantní omáčce s rýží nebo rýžovými nudlemi",
+          "price": "189 Kč",
+          "number": 1
+        },
+        {
+          "name": "Gà chiên sốt cà ri, obalované kuřecí kousky na kari s rýží nebo rýžovými nudlemi",
+          "price": "199 Kč",
+          "number": 2
+        },
+        {
+          "name": "Udon xào gà, restované nudle udon s kuřecím masem",
+          "price": "189 Kč",
+          "number": 3
+        },
+        {
+          "name": "Bún chả nướng, tenké rýžové nudle, grilované vepřové maso, rybí omáčka a bylinky",
+          "price": "189 Kč",
+          "number": 4
+        },
+        {
+          "name": "Bò Kungpao, hovězí Kung Pao s rýží nebo rýžovými nudlemi",
+          "price": "199 Kč",
+          "number": 5
+        },
+        {
+          "name": "Kkanpuki, restované kuřecí maso v pálivé omáčce s paprikou a rýží",
+          "price": "189 Kč",
+          "number": 6
+        },
+        {
+          "name": "Vịt chua ngọt, pečená kachna, sladkokyselá omáčka s rýží nebo rýžovými nudlemi",
+          "price": "239 Kč",
+          "number": 7
+        }
+      ]
+    },
+    "3": {
+      "day": "Čtvrtek",
+      "soups": [
+        {
+          "name": "Súp miso, japonská polévka, tofu a mořská řasa",
+          "price": "55 Kč"
+        }
+      ],
+      "dishes": [
+        {
+          "name": "Bún bò Nam bộ, tenké rýžové nudle, restované hovězí maso, arašídy, zelenina a zálivka",
+          "price": "189 Kč",
+          "number": 1
+        },
+        {
+          "name": "Gà Kungpao, kuřecí Kungpao s rýží nebo rýžovými nudlemi",
+          "price": "199 Kč",
+          "number": 2
+        },
+        {
+          "name": "Gà xào Cà ri, restované kuřecí maso, kari omáčka s rýží nebo rýžovými nudlemi",
+          "price": "189 Kč",
+          "number": 3
+        },
+        {
+          "name": "Thăn heo chiên sốt chua ngọt, křupavá vepřová panenka se sladkokyselou omáčkou a rýží nebo rýžovými nudlemi",
+          "price": "199 Kč",
+          "number": 4
+        },
+        {
+          "name": "Bò sốt tiêu đen, hovězí maso s pepřovou omáčkou a rýží nebo nudlemi",
+          "price": "199 Kč",
+          "number": 5
+        },
+        {
+          "name": "Mỳ Udon trộn bò, udon nudle s hovězím masem, vejcem a zeleninou",
+          "price": "209 Kč",
+          "number": 6
+        },
+        {
+          "name": "Vịt sốt cay, pečená kachna, pikantní omáčka s rýží nebo nudlemi",
+          "price": "239 Kč",
+          "number": 7
+        },
+        {
+          "name": "Gà xào sốt teriyaki, restované kuřecí maso s teriyaki omáčkou a rýží nebo nudlemi",
+          "price": "189 Kč",
+          "number": 8
+        }
+      ]
+    },
+    "4": {
+      "day": "Pátek",
+      "soups": [
+        {
+          "name": "Súp gà chua cay, pikantní kuřecí polévka",
+          "price": "55 Kč"
+        }
+      ],
+      "dishes": [
+        {
+          "name": "Gà xào sả ớt, restované kuřecí maso, zelenina, citronová tráva a chilli s rýží nebo rýžovými nudlemi",
+          "price": "189 Kč",
+          "number": 1
+        },
+        {
+          "name": "Gà chiên sốt cà ri, obalované kuřecí kousky na kari s rýží nebo nudlemi",
+          "price": "199 Kč",
+          "number": 2
+        },
+        {
+          "name": "Lườn gà tẩm bột chiên sốt chua ngọt, křupavá smažená kuřecí prsa se sladkokyselou omáčkou a rýží nebo nudlemi",
+          "price": "189 Kč",
+          "number": 3
+        },
+        {
+          "name": "Bò Kungpao, hovězí Kung Pao s rýží nebo rýžovými nudlemi",
+          "price": "199 Kč",
+          "number": 4
+        },
+        {
+          "name": "Bún nem, tenké rýžové nudle, smažené jarní závitky s vepřovým masem, rybí omáčka a bylinky",
+          "price": "189 Kč",
+          "number": 5
+        },
+        {
+          "name": "Mỳ xào bò nướng Hàn Quốc, restované nudle s bulgogi hovězím masem",
+          "price": "209 Kč",
+          "number": 6
+        },
+        {
+          "name": "Vịt sốt dầu hào, pečená kachna, ústřicová omáčka s rýží nebo nudlemi",
+          "price": "239 Kč",
+          "number": 7
+        }
+      ]
+    }
+  }
+}

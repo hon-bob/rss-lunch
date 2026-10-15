@@ -5,13 +5,13 @@
     <link>https://hon-bob.github.io/rss-lunch/rss.xml</link>
     <description>Denní menu vybraných restaurací</description>
     <language>cs-CZ</language>
-    <lastBuildDate>Thu, 15 Oct 2026 08:53:45 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 15 Oct 2026 10:14:59 +0200</lastBuildDate>
     <ttl>60</ttl>
     <item>
       <title>Slatina Bistro | Čtvrtek 15.10.2026</title>
       <link>https://www.slatinabistro.cz/</link>
       <guid isPermaLink="false">ad57fabeb3e4e5ce1ab5b4af5bd3c1e21942ed0f8ca6ae46439e308dd3b31808</guid>
-      <pubDate>Thu, 15 Oct 2026 08:53:45 +0200</pubDate>
+      <pubDate>Thu, 15 Oct 2026 10:14:59 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Slatina Bistro&lt;/h2&gt;
 &lt;p&gt;Čtvrtek 15.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -33,7 +33,7 @@
       <title>Táckárna | Čtvrtek 15.10.2026</title>
       <link>https://turanka.tackarna.cz/denni-menu/</link>
       <guid isPermaLink="false">7c07ccef19187330c0c1ce49ca2932e3d941f39f1bdd720e0d4ebcf403e1db8b</guid>
-      <pubDate>Thu, 15 Oct 2026 08:53:45 +0200</pubDate>
+      <pubDate>Thu, 15 Oct 2026 10:14:59 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Táckárna&lt;/h2&gt;
 &lt;p&gt;Čtvrtek 15.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -48,11 +48,12 @@
 &lt;p&gt;Podzimní polévka s červenou čočkou a zeleninou, 42 Kč&lt;/p&gt;
 &lt;h4&gt;🍽️ Nabídka na celý týden&lt;/h4&gt;
 &lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; Kimchi burger s trhaným vepřovým masem volským okem a sezamovou majonézou, hranolky, 215 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Salát Niçoise listové saláty, tuňák, vejce, brambory, olivy, fazolky, cherry rajče, 235 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; Spaghetti alla Bolognese masové ragú, kořenová zelenina, loupaná rajčata, sýr italského typu, 195 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;4.&lt;/strong&gt; Shrimp Poke sushi rýže, krevety na másle a česneku, cherry rajče, ledový salát, kukuřice, avokádo, okurka, ředkvičky, rajčatová majonéza, 229 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;5.&lt;/strong&gt; Tofu Siomai Poke sushi rýže, wonton knedlíčky s tofu a houby, čínské zelí v nálevu, okurkové špagety, nakládaná zelenina s papájou, červená řepa, kešu, smažená cibulka, výhonky, 199 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;6.&lt;/strong&gt; Chicken Curry Poke sushi rýže, kuřecí v kari marinádě, cherry rajče, červená řepa, ledový salát, batátové seno, hrášek, červená cibule, paprika, výhonky, 169 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Křupavé kuře sladko pikantní omáčka, smažená rýže se zeleninou, 165 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; Salát Niçoise listové saláty, tuňák, vejce, brambory, olivy, fazolky, cherry rajče, 235 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4.&lt;/strong&gt; Spaghetti alla Bolognese masové ragú, kořenová zelenina, loupaná rajčata, sýr italského typu, 195 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;5.&lt;/strong&gt; Shrimp Poke sushi rýže, krevety na másle a česneku, cherry rajče, ledový salát, kukuřice, avokádo, okurka, ředkvičky, rajčatová majonéza, 229 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;6.&lt;/strong&gt; Tofu Siomai Poke sushi rýže, wonton knedlíčky s tofu a houby, čínské zelí v nálevu, okurkové špagety, nakládaná zelenina s papájou, červená řepa, kešu, smažená cibulka, výhonky, 199 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;7.&lt;/strong&gt; Chicken Curry Poke sushi rýže, kuřecí v kari marinádě, cherry rajče, červená řepa, ledový salát, batátové seno, hrášek, červená cibule, paprika, výhonky, 169 Kč&lt;/p&gt;
 &lt;h3&gt;🍕 Pizza&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; Prosciutto Cotto sugo, šunka Prosciutto Cotto, sýr Mozzarella, cherry rajče, bazalka, 219 Kč&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Quattro Formaggi smetana, sýr Gorgonzola, sýr Parmazán, sýr uzená Scamorza, sýr Mozzarella, bazalka, 229 Kč&lt;/p&gt;
@@ -64,7 +65,7 @@
       <title>Jomsom | Čtvrtek 15.10.2026</title>
       <link>https://www.jomsom.cz/polednimenu/</link>
       <guid isPermaLink="false">68d1998a3fc1358fd2660d3f9574c02982e394b1d6436dab1783e9577bec06a1</guid>
-      <pubDate>Thu, 15 Oct 2026 08:53:45 +0200</pubDate>
+      <pubDate>Thu, 15 Oct 2026 10:14:59 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Jomsom&lt;/h2&gt;
 &lt;p&gt;Čtvrtek 15.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -79,7 +80,7 @@
       <title>MOC BBQ House | Čtvrtek 15.10.2026</title>
       <link>https://mocbbqhouse.cz/obedove-menu/</link>
       <guid isPermaLink="false">4a3eb893c795b966c7e5b90888a0cec50e277f7caabdbdb084051c39e3e75cf9</guid>
-      <pubDate>Thu, 15 Oct 2026 08:53:45 +0200</pubDate>
+      <pubDate>Thu, 15 Oct 2026 10:14:59 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ MOC BBQ House&lt;/h2&gt;
 &lt;p&gt;Čtvrtek 15.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;

@@ -5,13 +5,13 @@
     <link>https://hon-bob.github.io/rss-lunch/rss.xml</link>
     <description>Denní menu vybraných restaurací</description>
     <language>cs-CZ</language>
-    <lastBuildDate>Fri, 16 Oct 2026 08:53:11 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 16 Oct 2026 10:13:38 +0200</lastBuildDate>
     <ttl>60</ttl>
     <item>
       <title>Slatina Bistro | Pátek 16.10.2026</title>
       <link>https://www.slatinabistro.cz/</link>
       <guid isPermaLink="false">d397e11263d7e954731ab18c153feeb8401962c388bc709a997683b3cf5ca119</guid>
-      <pubDate>Fri, 16 Oct 2026 08:53:11 +0200</pubDate>
+      <pubDate>Fri, 16 Oct 2026 10:13:38 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Slatina Bistro&lt;/h2&gt;
 &lt;p&gt;Pátek 16.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -33,13 +33,13 @@
       <title>Táckárna | Pátek 16.10.2026</title>
       <link>https://turanka.tackarna.cz/denni-menu/</link>
       <guid isPermaLink="false">428e89c54e6bc6141357406b5f1305e6fb400050692c25968950aad609906c1a</guid>
-      <pubDate>Fri, 16 Oct 2026 08:53:11 +0200</pubDate>
+      <pubDate>Fri, 16 Oct 2026 10:13:38 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Táckárna&lt;/h2&gt;
 &lt;p&gt;Pátek 16.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
 &lt;p&gt;Bramboračka, 42 Kč&lt;/p&gt;
 &lt;h3&gt;🍽️ Denní menu&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; BALANCED: Vepřové Tamari styr fry s brokolicí a hráškovými lusky, basmati rýže., 164 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; BALANCED: Vepřové Tamari styr fry s brokolicí a hráškem, basmati rýže., 164 Kč&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Gnocchi alla Pizzaiola rajčata, sýr Mozzarella, olivový olej, šalotka, 144 Kč&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; Kuřecí stripsy v cornflakes krokety, fry mayo, 154 Kč&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;4.&lt;/strong&gt; Moravský talíř křupavý vepřový bůček, uzená krkovička, pečená papriková klobása, škvarky, kysané zelí, náš cibulový kváskový chléb, 174 Kč&lt;/p&gt;
@@ -48,11 +48,12 @@
 &lt;p&gt;Podzimní polévka s červenou čočkou a zeleninou, 42 Kč&lt;/p&gt;
 &lt;h4&gt;🍽️ Nabídka na celý týden&lt;/h4&gt;
 &lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; Kimchi burger s trhaným vepřovým masem volským okem a sezamovou majonézou, hranolky, 215 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Salát Niçoise listové saláty, tuňák, vejce, brambory, olivy, fazolky, cherry rajče, 235 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; Spaghetti alla Bolognese masové ragú, kořenová zelenina, loupaná rajčata, sýr italského typu, 195 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;4.&lt;/strong&gt; Shrimp Poke sushi rýže, krevety na másle a česneku, cherry rajče, ledový salát, kukuřice, avokádo, okurka, ředkvičky, rajčatová majonéza, 229 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;5.&lt;/strong&gt; Tofu Siomai Poke sushi rýže, wonton knedlíčky s tofu a houby, čínské zelí v nálevu, okurkové špagety, nakládaná zelenina s papájou, červená řepa, kešu, smažená cibulka, výhonky, 199 Kč&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;6.&lt;/strong&gt; Chicken Curry Poke sushi rýže, kuřecí v kari marinádě, cherry rajče, červená řepa, ledový salát, batátové seno, hrášek, červená cibule, paprika, výhonky, 169 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Křupavé kuře sladko pikantní omáčka, smažená rýže se zeleninou, 165 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; Salát Niçoise listové saláty, tuňák, vejce, brambory, olivy, fazolky, cherry rajče, 235 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4.&lt;/strong&gt; Spaghetti alla Bolognese masové ragú, kořenová zelenina, loupaná rajčata, sýr italského typu, 195 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;5.&lt;/strong&gt; Shrimp Poke sushi rýže, krevety na másle a česneku, cherry rajče, ledový salát, kukuřice, avokádo, okurka, ředkvičky, rajčatová majonéza, 229 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;6.&lt;/strong&gt; Tofu Siomai Poke sushi rýže, wonton knedlíčky s tofu a houby, čínské zelí v nálevu, okurkové špagety, nakládaná zelenina s papájou, červená řepa, kešu, smažená cibulka, výhonky, 199 Kč&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;7.&lt;/strong&gt; Chicken Curry Poke sushi rýže, kuřecí v kari marinádě, cherry rajče, červená řepa, ledový salát, batátové seno, hrášek, červená cibule, paprika, výhonky, 169 Kč&lt;/p&gt;
 &lt;h3&gt;🍕 Pizza&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; Prosciutto Cotto sugo, šunka Prosciutto Cotto, sýr Mozzarella, cherry rajče, bazalka, 219 Kč&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Quattro Formaggi smetana, sýr Gorgonzola, sýr Parmazán, sýr uzená Scamorza, sýr Mozzarella, bazalka, 229 Kč&lt;/p&gt;
@@ -64,7 +65,7 @@
       <title>Jomsom | Pátek 16.10.2026</title>
       <link>https://www.jomsom.cz/polednimenu/</link>
       <guid isPermaLink="false">90e0a51c12b18b77fb7952f4be59eecccc20153469cd015af8368aa2407a82d3</guid>
-      <pubDate>Fri, 16 Oct 2026 08:53:11 +0200</pubDate>
+      <pubDate>Fri, 16 Oct 2026 10:13:38 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Jomsom&lt;/h2&gt;
 &lt;p&gt;Pátek 16.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -79,7 +80,7 @@
       <title>MOC BBQ House | Pátek 16.10.2026</title>
       <link>https://mocbbqhouse.cz/obedove-menu/</link>
       <guid isPermaLink="false">9c8cf99075a53bd0ff481f9f4726589481363d3e18d87e05d850828feaf79aa9</guid>
-      <pubDate>Fri, 16 Oct 2026 08:53:11 +0200</pubDate>
+      <pubDate>Fri, 16 Oct 2026 10:13:38 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ MOC BBQ House&lt;/h2&gt;
 &lt;p&gt;Pátek 16.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;

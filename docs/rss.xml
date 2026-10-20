@@ -5,13 +5,13 @@
     <link>https://hon-bob.github.io/rss-lunch/rss.xml</link>
     <description>Denní menu vybraných restaurací</description>
     <language>cs-CZ</language>
-    <lastBuildDate>Tue, 20 Oct 2026 13:35:10 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 20 Oct 2026 15:01:54 +0200</lastBuildDate>
     <ttl>60</ttl>
     <item>
       <title>Slatina Bistro | Úterý 20.10.2026</title>
       <link>https://www.slatinabistro.cz/</link>
       <guid isPermaLink="false">a516cc2cd159a417327ba0fb0d8090150256ca821c9fa77debd45c67fdc31818</guid>
-      <pubDate>Tue, 20 Oct 2026 13:35:10 +0200</pubDate>
+      <pubDate>Tue, 20 Oct 2026 15:01:54 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Slatina Bistro&lt;/h2&gt;
 &lt;p&gt;Úterý 20.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -33,7 +33,7 @@
       <title>Táckárna | Úterý 20.10.2026</title>
       <link>https://turanka.tackarna.cz/denni-menu/</link>
       <guid isPermaLink="false">19767cff11372d71bdaf198cfa0ecd4d8a4db5dd8c4dc73401317b1dd8e39939</guid>
-      <pubDate>Tue, 20 Oct 2026 13:35:10 +0200</pubDate>
+      <pubDate>Tue, 20 Oct 2026 15:01:54 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ Táckárna&lt;/h2&gt;
 &lt;p&gt;Úterý 20.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
@@ -63,14 +63,14 @@
       <title>Jomsom | menu se nepodařilo načíst</title>
       <link>https://www.jomsom.cz/polednimenu/</link>
       <guid isPermaLink="false">jomsom-error-2026-10-20</guid>
-      <pubDate>Tue, 20 Oct 2026 13:35:10 +0200</pubDate>
+      <pubDate>Tue, 20 Oct 2026 15:01:54 +0200</pubDate>
       <description>Menu se nepodařilo načíst: No menu items were extracted.</description>
     </item>
     <item>
       <title>MOC BBQ House | Úterý 20.10.2026</title>
       <link>https://mocbbqhouse.cz/obedove-menu/</link>
       <guid isPermaLink="false">e3f019d5a9af10279db7cae7152810a36e49246af1067d47f9a69c76eea7845c</guid>
-      <pubDate>Tue, 20 Oct 2026 13:35:10 +0200</pubDate>
+      <pubDate>Tue, 20 Oct 2026 15:01:54 +0200</pubDate>
       <description>&lt;h2&gt;🍽️ MOC BBQ House&lt;/h2&gt;
 &lt;p&gt;Úterý 20.10.2026&lt;/p&gt;
 &lt;h3&gt;🍲 Polévky&lt;/h3&gt;
